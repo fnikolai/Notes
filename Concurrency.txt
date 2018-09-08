@@ -1,0 +1,40 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-21T19:49:22+01:00
+
+====== Concurrency ======
+Created Saturday 21 January 2017
+
+
+* consistency (the static properly)
+* concurrency control (the problem)
+* serializability (the theory)
+* locking (the technique)
+
+
+1. First law of concurrency control : (isolation)
+	* concurrrent execution should not cause application programs to malfunction
+2. Second law of concurrency control :
+	* concurrent execution should not have lower throughput or much higher response times than serial execution
+
+
+
+===== Concurrency vs Parallelism =====
+
+==== Concurrency (Event handling) ====
+* The vending machine is an event handling system: people come at unpredictable moments, and find an unpredictable amount of cans in the machine.
+* With event handling systems such as vending machines, telephony, web servers and banks, concurrency is inherent to the problem – you must resolve inevitable conflicts between unpredictable requests. Parallelism is a part of the solution - it speeds things up, but the root of the problem is concurrency.
+
+==== Parallelism (Computation) ====
+* The gift boxes is a computational system: you know the kids, you know what you bought, and you decide who gets what and how.
+* With computational systems such as gift boxes, graphics, computer vision and scientific computing, concurrency is not a part of the problem – you compute an output from inputs known in advance, without any external events. Parallelism is where the problems start – it speeds things up, but it can introduce bugs.
+
+
+
+===== Approaches =====
+
+* **Optimistic concurrency control** : 
+	* Potential conflicts throughout the concurrent execution of operations are detected late. Basically, at commit time a check is made to see if the objects in the committing transaction have been modified by any other transaction in the meantime.
+
+* **Pessimistic concurrency control:** 
+	* Conflicts are detected early. Locking objects to prevent concurrent modifications usually achieves this.

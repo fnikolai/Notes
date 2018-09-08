@@ -1,0 +1,146 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-04-18T19:46:37+02:00
+
+====== Kubernetes ======
+Created Tuesday 18 April 2017
+
+
+===== Components =====
+
+**Pod:** A pod is the smallest unit of computing in Kubernetes. It is a group of containers running in shared context (share resources like file systems, kernel namespaces and an IP address.)
+**ReplicaSets:** A ReplicaSet ensures a specific number of pod replicas are always up and running. While ReplicaSets are independent entities, they are mainly used by Deployments as a mechanism to orchestrate pod creation, deletion and updates.
+**Deployment:** A deployment can be thought of as an abstraction containing Pods and ReplicaSet.
+**Service:** A service defines a logical set of Pods and a policy by which to access them. The set of Pods targeted by a Service is determined by a Label Selector (defined in Service’s yaml file).
+**Persistent Volumes:** A Persistent Volume (PV) is a piece of networked storage in the cluster with storage specific details abstracted away.
+**Persistent Volume Claims:** A Persistent Volume Claim (PVC) is a request for storage by an application/pod.
+
+
+
+The benefits of thinking in terms of modular containers are enormous, in particular, modular containers provide the following:
+Speed application development, since containers can be re-used between teams and even larger communities
+Codify expert knowledge, since everyone collaborates on a single containerized implementation that reflects best-practices rather than a myriad of different home-grown containers with roughly the same functionality
+Enable agile teams, since the container boundary is a natural boundary and contract for team responsibilities
+Provide separation of concerns and focus on specific functionality that reduces spaghetti dependencies and un-testable components
+
+Building an application from modular containers means thinking about symbiotic groups of containers that cooperate to provide a service, not one container per service.  In Kubernetes, the embodiment of this modular container service is a Pod.  
+
+Since it supports packaging multiple containers into a pod, which is a logical unit of deployment, all the containers belonging to a specific pod should share the data. Co
+
+State aware applications like databases or file repositories need access to the same file system no matter where the container they are running on is scheduled. Kubernetes and Openshift call this persistent volume.
+
+Users of Kubernetes request persistent storage for their pods. The nature of the underlying provisioning need not be known by users. Users must know that they can rely on their claims to storage and that they can manage that storage’s lifecycle independently of the many pods that may use it.
+
+Claims must be created in the same namespace as the pods that use them.
+
+Each container can mount several volumes; on the other hand, a single volume can be mounted into several containers. 
+
+
+===== Usages =====
+
+* **Sidecar** containers extend and enhance the "main" container, they take existing containers and make them better. 
+* **Ambassador** containers proxy a local connection to the world.  As an example, consider a Redis cluster with read-replicas and a single write master.  You can create a Pod that groups your main application with a Redis ambassador container. 
+* **Adapter** containers standardize and normalize output.  
+
+===== Deployment =====
+* use a Deployment to manage maintaining and updating your running Pods.
+* The Deployment uses a label selector to identify the Pods it manages, and will create or delete Pods as needed to meet the replica count.
+* A service provides a way to refer to a set of Pods (selected by labels) with a single static IP address. It may also provide load balancing, if supported by the provider.
+* A Deployment provides declarative updates for Pods and Replica Sets (the next-generation Replication Controller). You only need to describe the desired state in a Deployment object, and the Deployment controller will change the actual state to the desired state at a controlled rate for you. You can define Deployments to create new resources, or replace existing ones by new ones.
+
+===== POD =====
+
+* To run containers in Kubernetes it uses the concept of a “pod”. A pod is a grouping of one or more containers that are closely related. They start and stop together and run on the same host.
+* Each pod gets a dedicated ip address in the Kubernetes cluster. Multiple pods can run on the same host whilst being fully isolated from each other. Applications in different pods can use the same ports for their communication without causing problems. 
+
+Inside the pod localhost resolves to the pod, not the host running the pod. This can be used to let multiple applications running in the same pod to communicate with each other using localhost and the original port the applications listen to. This makes communication inside a pod fast and more secure as it doesn’t hit the network.
+
+A pod (as in a pod of whales or pea pod) is a group of one or more containers (such as Docker containers), the shared storage for those containers, and options about how to run the containers. Pods are always co-located and co-scheduled, and run in a shared context. 
+
+Applications within a pod also have access to shared volumes, which are defined as part of a pod and are made available to be mounted into each application’s filesystem
+
+n terms of Docker constructs, a pod is modelled as a group of Docker containers with shared namespaces and shared volumes.
+
+Pods enable data sharing and communication among their constituents.
+The applications in a pod all use the same network namespace (same IP and port space), and can thus “find” each other and communicate using localhost.
+
+
+===== Service =====
+A Kubernetes Service is an abstraction which defines a logical set of Pods and a policy by which to access them - sometimes called a micro-service.
+
+===== Namespaces =====
+
+(It works on the names of kubernetes entities, not on files)
+
+Namespaces are a logical partitioning capability that enable one Kubernetes cluster to be used by multiple users, teams of users, or a single user with multiple applications without concern for undesired interaction
+
+Namespace sets up virtual clusters over the same physical cluster. Rather than the need to set up an entire physical cluster for a new environment. We can set up several different virtual cluster over the same physical cluster using namespaces.
+
+
+In Kubernetes you run your applications in a namespace; inside the same namespace you can discover the other applications by service name. The isolation namespaces provide allow you to reuse the same service name in different namespaces, resolving to the applications running in those namespaces.
+
+Namespaces provide a scope for names. Names of resources need to be unique within a namespace, but not across namespaces.
+Namespaces are a way to divide cluster resources between multiple uses (via resource quota).
+
+
+===== Volumes =====
+
+Quite simply, volumes are directories (or files) that are outside of the default Union File System and exist as normal directories and files on the host filesystem.
+
+A process in a container sees a filesystem view composed from their Docker image and volumes.
+. Volumes can not mount onto other volumes or have hard links to other volumes. Each container in the Pod must independently specify where to mount each volume.
+
+In Docker, a volume is simply a directory on disk or in another container. Lifetimes are not managed and until very recently there were only local-disk-backed volumes.
+
+Kubernetes volumes may be classified into host-based storage and non-host-based storage types. Host-based storage is similar to Docker volumes, where a portion of the host’s storage becomes available to the pod. Once a pod is terminated, the volume gets automatically deleted. Non-host-based storage doesn’t rely on a specific node. Instead, a storage volume is created from an external storage service. Volumes based on this storage type would be available even after the pods are deleted.
+
+
+Volumes are defined in the volumes section of a pod’s definition. The source of the data in the volumes is either:
+
+a remote NFS share,
+an iSCSI target,
+an empty directory, or
+a local directory on the host.
+
+
+Docker takes the read-only image and adds a read-write layer on top. If the running container modifies an existing file, the file is copied out of the underlying read-only layer and into the top-most read-write layer where the changes are applied. 
+
+Docker calls this combination of read-only layers with a read-write layer on top a Union File System.
+
+
+
+===== PV-PVC =====
+
+* PVs are defined by a PersistentVolume API object, which represents a piece of existing networked storage in the cluster that has been provisioned by an administrator. 
+* After a PV has been bound to a PVC, however, that PV cannot then be bound to additional PVCs. This has the effect of scoping a bound PV to a single namespace (that of the binding project).
+* PVCs are defined by a PersistentVolumeClaim API object, which represents a request for storage by a developer
+* For example, pods can request specific levels of resources (e.g., CPU and memory), while PVCs can request specific storage capacity and access modes (e.g, they can be mounted once read/write or many times read-only).
+* When a user is done with a volume, they can delete the PVC object from the API which allows reclamation of the resource
+* The reclaim policy of a PersistentVolume tells the cluster what to do with the volume after it is released. Currently, volumes can either be retained or recycled.
+* Currently, storage capacity is the only resource that can be set or requested. Future attributes may include IOPS, throughput, etc.
+* Providers will have different capabilities and each PV’s access modes are set to the specific modes supported by that particular volume. For example, NFS can support multiple read/write clients, but a specific NFS PV might be exported on the server as read-only.
+* A claim’s access modes represent a request. Therefore, the user may be granted more, but never less. 
+* High-availability of storage in the infrastructure is left to the underlying storage provider.
+
+You can share PV and PVC within the same project/namespace for shared volumes (nfs, gluster, etc...), you can also access your shared volume from multiple project/namespaces but it will require project dedicated PV and PVCs, as a PV is bound to single project/namespace and PVC is project/namespace scoped.
+
+A single cluster should be able to satisfy the needs of multiple users or groups of users (henceforth a ‘user community’).
+Each user community wants to be able to work in isolation from other communities.
+Each user community has its own:
+resources (pods, services, replication controllers, etc.)
+policies (who can or cannot perform actions in their community)
+constraints (this community is allowed this much quota, etc.)
+
+
+
+**use cases**
+As a cluster operator, I want to support multiple user communities on a single cluster.
+As a cluster operator, I want to delegate authority to partitions of the cluster to trusted users in those communities.
+As a cluster operator, I want to limit the amount of resources each community can consume in order to limit the impact to other communities using the cluster.
+As a cluster user, I want to interact with resources that are pertinent to my user community in isolation of what other user communities are doing on the cluster.
+
+
+When you create a Service, it creates a corresponding DNS entry. This entry is of the form <service-name>.<namespace-name>.svc.cluster.local, which means that if a container just uses <service-name> it will resolve to the service which is local to a namespace. This is useful for using the same configuration across multiple namespaces such as Development, Staging and Production. If you want to reach across namespaces, you need to use the fully qualified domain name (FQDN).
+
+
+

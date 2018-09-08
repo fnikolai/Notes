@@ -1,0 +1,30 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2018-09-08T18:24:38+02:00
+
+====== Benchmarks ======
+Created Saturday 08 September 2018
+
+===== Differences between Performance, Load and Stress Testing =====
+http://toolsqa.com/software-testing/differences-between-performance-load-and-stress-testing/
+
+**Performance Testing** : This measures the response time of an application with an expected number of users. The aim of this is to get a baseline and an indication of how an application behaves under normal conditions. Does it meet the required response time or not.
+
+It is all about response time, request time, throughput time and mean time of application.
+
+**Load Testing** : This measures the response time when the application is subjected to more than usual load. The application will be slower under heavy load, but the aim of load testing is to see whether the application can sustain the increased load on the server or will it crash and kill the servers. Load is more about characterizing / simulating your actual workload. Load testing is usually started as low numbers and gradually increased over a given period of time until it reaches the desired load on the system and then it ramps down.
+
+It is all about testing behavior under normal and peak workload conditions.
+
+**Stress Testing** : Stress Testing is like load testing but we keep on increasing the load on the server till the time it crash down. The aim of stress testing is to test the insane limits of an application. Stress testing starts of the same as load testing, e.g. gradually increasing load on the servers, the process is repeated till the time the load is reached to the unexpected limits.
+
+It is all about surfacing issues under extreme conditions and resource failures.
+
+===== Tools =====
+
+Stress Test for Live Data Verification (S-Live) 
+
+S-Live test is built using the DFSIO benchmark framework. It runs as a map-reduce job.
+It has multiple mappers and a fixed number of reducers. The mappers perform HDFS
+operations in a loop and measure their performance. The reducers summarize and average
+the results. 

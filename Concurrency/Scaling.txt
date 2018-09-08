@@ -1,0 +1,28 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-07-26T20:07:13+02:00
+
+====== Scaling ======
+Created Wednesday 26 July 2017
+
+* 2PC (two-phase commit) for providing ACID guarantees across multiple database instances.
+* The availability of any system is the product of the availability of the components required for operation.
+
+===== Vertical =====
+
+
+===== Horizontal =====
+
+==== Functional scaling (Normalization) ====
+* Involes grouping data by function and spreading functional groups across databases
+* Relying on database constraints to ensure consistency across functional groups creates a coupling of the schema to a database deployment strategy
+* For constraints to be applied, the tables must reside on a single database server, precluding horizontal scaling as transaction rates grow
+* Functionally distinct data on different database servers. This requires moving data constraints out of the database and into the application.
+* Consistnecy across functional groups is easier to relax than within functional groups
+
+==== Sharding ====
+* Splitting data within functional areas across multiple databases, or sharding,1 adds the second dimension to horizontal scaling.
+
+
+{{./pasted_image.png}}
+

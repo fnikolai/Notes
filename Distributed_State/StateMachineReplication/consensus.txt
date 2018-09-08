@@ -1,0 +1,19 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-24T12:35:40+01:00
+
+====== consensus ======
+Created Tuesday 24 January 2017
+
+* We can use consensus algorithm to build fault tolerant distributed commit protocols by (this is somewhat of an over-simplification) having nodes “decide” whether or not a transaction has been committed or aborted.
+
+* Problem is that it’s impossible to construct a fault tolerant consensus algorithm that will terminate in a guaranteed time-bound in an asynchronous system lacking a common clock: this is known (after the Fisher, Lynch, Patterson) as the FLP impossibility result. Eric Brewer’s CAP theorem (a well covered topic) can be argued to be an elegant and intuitive re-statement of the FLP.
+
+* In practice, however, consensus algorithms can be constructed with reasonable liveness properties.
+
+* in a well designed distributed system, cluster membership and partition ownership changes are less frequent than updates themselves (much lower throughput, less of a scalability challenge) and are less sensitive to latency. Finally, by limiting our interaction with consensus based systems, we are able to limit the impact of scenarios of where consensus can’t be reached due to machine, software or network failures.
+
+
+===== Raft =====
+
+===== Paxos =====

@@ -1,0 +1,27 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-24T12:43:22+01:00
+
+====== StateMachineReplication ======
+Created Tuesday 24 January 2017
+
+1. Place copies of the State Machine on multiple, independent servers.
+2. Receive client requests, interpreted as Inputs to the State Machine.
+3. Choose an ordering for the Inputs.
+4. Execute Inputs in the chosen order on each server.
+5. Respond to clients with the Output from the State Machine.
+6. Monitor replicas for differences in State or Output.
+7. The remainder of this article develops the details of this technique.
+
+Step 1 and 2 are outside the scope of this article.
+Step 3 is the critical operation, see Ordering Inputs.
+Step 4 is covered by the State Machine Definition.
+Step 5, see Ordering Outputs.
+Step 6, see Auditing and Failure Detection.
+
+
+* Paxos can be slow and scales poorly, and like virtual synchrony, can be quite hard to use correctly.
+* **!!!!!! T**he variables are assumed to be persistent (for example they might be stored in files), but are not assumed to have full ACID properties, and access is not assumed to go through a transactional begin/commit/abort interface.
+* state machine approach is a general method for implementing a fault-tolerant service by replicating servers and coordinating client interactions with server replicas. 
+
+* The idea is that if we model each node in a distributed system as a state machine, and send the same input (messages) in the same order to each state machine, we will end up in the same final state.

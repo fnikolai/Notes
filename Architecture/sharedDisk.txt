@@ -1,0 +1,21 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-28T21:33:46+01:00
+
+====== sharedDisk ======
+Created Saturday 28 January 2017
+
+{{./pasted_image.png?width=400}}
+
+
+* Any node can access any data directly through a read/write interface
+* Contention when numberous nodes attempt to communicate with the disk
+* Shared cache on each of the computing nodes to avoid contention
+	* Hugh-speed network to maintain cache coherency
+
+===== Queries =====
+* Send data to the query, not vice-versa as is happening with share Nothing.
+* Compute: user program, disconnected from data storage
+	* To the client-side 
+* Parallelism: user controlled
+* All nodes are not equal

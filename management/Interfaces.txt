@@ -1,0 +1,31 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-05T17:39:17+01:00
+
+====== Interfaces ======
+Created Sunday 05 March 2017
+
+===== Topics =====
+* APIs
+* Limits
+* Client Authentication
+* Multi-region support
+
+
+===== AWS S3 =====
+* Provides Object Storage
+* AWS EBD (block device) is build on top
+* RESTful HTTP API for CRUD functions
+* HTTP SOAP interface and supports the BitTorrent protocol.
+* S3 has different authentication mechanism that Swift and Rados
+
+===== Openstack Swift =====
+* Provides Object Storage
+* Cinder (block device) is build on top
+* RESTful HTTP API for CRUD functions
+* Can be integrated with Keystone (the OpenStack Identity service, so user authentication and management can be delegated to Keystone)
+
+===== Ceph Rados =====
+* Provides Object Storage
+* Ceph Block is build on top
+* Can be integrated with Keystone (the OpenStack Identity service, so user authentication and management can be delegated to Keystone)

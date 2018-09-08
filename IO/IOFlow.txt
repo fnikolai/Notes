@@ -1,0 +1,134 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-09T17:35:27+01:00
+
+====== IOFlow ======
+Created Thursday 09 March 2017
+
+
+* A platform (similar to tromos) to deliver QOS to IO streams. 
+* What it does it to encalupsate raw IO into logical streams and organize the way they are written to multi-tenant resources
+* Every IO node is composed a set of queues. The controller, having global knowledge, at runtime set the size of those queues to throttle the transmission rate
+
+
+* Relies on higher levels (e.g application) to force the request ordering
+
+
+--------------------------------------------------------------------------------
+# IOFlow: a software-defined storage architecture
+
+	> It comprises many layers or "stages" with opaque interfaces between them. T
+	...... We design IOFlow, an architecture that uses a logically centralized
+	control plane to enable high-level flow policies.
+
+	> IOFlow does not require application or VM changes, a key strength for
+	deployability.
+
+	> This virtual disk is simply a large file on a shared storage server accessible
+	across the shared data center network. Though these trends have delivered on
+	the promise of reduced costs and easier management, ironically they have also
+	resulted in increased end-to-end complexity.
+
+
+	> For example, guaranteeing a tenant's IO bandwidth requires dynamic layer
+	configuration across the paths from all its VMs to the storage servers
+
+
+	> First, a logically centralized controller discovers data plane stages (i.e.,
+	layers that are IOFlow compliant), and maintains a stage-level data center
+	topology graph. Second, dataplane queues allow for differentiated treatment of
+	IO
+
+
+	> requests. Stages expose a simple control interface that specifies the low-level
+	identifiers that can be used to direct requests to queues.
+
+
+	> A key challenge was designing queues and rate limiters for storage flows.
+
+	> Unlike a network flow which refers to a transport connection between two
+	endpoints, we use the term "flow" to refer to all IO requests to which a single
+	policy applies. So flows can be multi-point with one or more source endpoints
+	and one or more destination endpoints.
+
+
+	> However, individual layers may not recognize these names, and thus, they may not
+	be able to attribute a request to the flow it belongs to and the policy that
+	applies.
+
+
+	> Dynamic enforcement. S
+
+
+	> Some policies may not be feasible due to the capacity of the underlying physical
+	resources.
+
+
+	> Each stage implements traffic differentiation through queues.  ...... Queues
+	have service properties that govern how fast they are serviced, and routing
+	properties that dictate the next stage to which IO requests are routed.
+
+	> These control applications translate high-level flow policies into stage-
+	specific configuration, namely queuing rules for assigning packets to queues
+	and the queue properties
+
+
+	> First, queues at stages must be fast and cause minimal performance degradation.
+
+
+	> To throttle IO traffic, queues use a token-bucket abstraction [31].  ...... If a
+	queue reaches the queue size threshold, the stage notifies the controller and
+	blocks any further inserts to that queue. There is no support in the IO stack
+	for dropping IO requests, but there is support for blocking requests and
+	applying back-pressure.
+
+	> While a write operation contains the payload, a read operation starts small in
+	length (usually just a header) at the sender and the response contains the
+	payload. Thus, at sender stages, instead of releasing tokens based on bytes in
+	the request, they need to be released based on the end-to-end cost of the
+	operation.
+
+
+	> Second, operation processing time at the storage back-end is also variable. O
+	...... To address this, the controller's discovery component benchmarks the
+	storage devices to measure the cost of IO requests as a function of their type
+	and size  ...... Such configuration is done periodically since the cost of IO
+	requests varies with varying aggregate workload to the storage device.
+
+
+	> Third, to bound the performance uncertainty of arbitrary long IO requests, we
+	can instruct SMB to split them; e.g., a 10 MB request can be split into 10
+	requests of 1 MB with minimal performance penalty
+
+
+	> IOFlow's controller chooses where to implement the policy so as to minimize
+	performance impact.  ...... For example, for a tenant with VMs across 10
+	hypervisors accessing the same storage server, the controller prefers to do
+	rate limiting at each of the hypervisors for greater parallelism, rather than
+	at the storage server.
+
+	> Upon receiving a message with a version number, the stages discard any
+	subsequent messages with lower version numbers (
+
+
+	> IOFlow does not change application request ordering semantics. IOFlow can delay
+	IOs or divert them to different queues. However, applications already ensure
+	ordering semantics at a higher level in order to deal with, for example,
+	resources like disks that could complete requests in any order. Applications
+	have two ways of ensuring ordering: either use synchronous IO or use
+	asynchronous IO with explicit fsync calls. IOFlow does not change the semantics
+	in
+
+	> Specifically, VMs are allocated rates in order of increasing demands such that
+	no VM gets a rate larger than its demand and VMs with unsatisfied demands get
+	equal 2 rates.
+
+	> Min-guarantee.
+
+
+	> Programmable data plane queues allow for differentiated traffic treatment and
+	workload isolation.
+
+	> enabling high-level SLOs on shared storage systems.
+
+	> Token bucket,

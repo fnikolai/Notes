@@ -1,0 +1,18 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-09-25T19:09:13+03:00
+
+====== POSIX ======
+Created Monday 25 September 2017
+
+In the area of "requires POSIX filesystem semantics" what is typically meant is:
+
+allows hierarchical file names and resolution (., .., ...)
+supports at least close-to-open semantics
+umask/unix permissions, 3 filetimes
+8bit byte support
+supports atomic renames on same filesystem
+fsync()/dirfsync() durability gurantee/limitation
+supports multi-user protection (resizing file returns 0 bytes not junk)
+rename and delete open files (Windows does not do that)
+file names supporting all bytes beside '/' and \0

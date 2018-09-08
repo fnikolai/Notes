@@ -1,0 +1,20 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2018-02-15T21:48:39+01:00
+
+====== Point-in-time ======
+Created Thursday 15 February 2018
+
+===== Hyper-V Snapshot =====
+
+ .AVHD[X] files are created for each .VHD[X] file attached to the virtual machine. All data changes that would normally go into the .VHD[X] files are written to these files instead. When the virtual machine requests data, it is retrieved from the file that contains the most recent change. .AVHD[X] files work similar to the fashion of a database log file, tracking absolutely everything that happens.
+
+ Hyper-V does it so a virtual machine can have a complete rollback point. 
+
+===== VSS Snapshot =====
+
+When this event occurs, VSS notifies Windows to flush all read/write buffers so that no disk I/O is in memory. It then begins a snapshot process.
+
+It utilizes a block-level system to ensure that the backup applications are able to read out a copy of the volume’s data exactly as it was at the point that the snapshot was taken without worrying about file locks. Read and write operations continue as normal and the backup application is free to take as much time as it needs to copy out this data. 
+
+ VSS only does it so that a backup application can pull the read-only copies out for long-term storage. 

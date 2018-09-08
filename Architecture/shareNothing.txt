@@ -1,0 +1,28 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-24T13:32:05+01:00
+
+====== shareNothing ======
+Created Tuesday 24 January 2017
+
+{{./pasted_image.png?width=400}}
+
+* Shared nothing architecture means the nodes in the system don’t share memory or disk
+	* Data resides locally (disk, ram)
+	* Accessible through network (TCP, RDMA...)
+
+* Each node own a subset of the data, and operates exclusively on that
+
+* The space of all possible primary keys is partitioned (a.k.a “sharding”) by using either hashing or range based partitioning, such that one or more partitions could be assigned to a primary physical location.
+
+* Since data is spread across several nodes, assuming a uniform key and request distribution, the system scales linearly to multiple nodes. It could be also made elastic by using consistent hashing and/or virtual partitions. For availability and reliability, different types of replication can be used, placing the data at multiple physical locations.
+
+* In case of independent failures, partitioning also provides fault isolation: provided the system knows how to serve results from a partial dataset, only the partitions held by the failed nodes are affected.
+
+
+
+===== Queries =====
+* send query to the data, parallel execution if possible
+* compute: inside queries, as user-defined	 functions
+	* To the storage controller-side
+* All nodes equal

@@ -1,0 +1,24 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-09-18T17:04:51+03:00
+
+====== ProgrammingModels ======
+Created Monday 18 September 2017
+
+
+
+Dataflow is deterministic which allows parallelism.
+Actors are non-deterministic which allows concurrency.
+
+
+
+A flow chart details the processes to follow. A DFD details the flow of data through a system.
+
+In a flow chart, the arrows represent transfer of control (not data) between elements and the elements are instructions or decision (or I/O, etc).
+
+In a DFD, the arrows are actually data transfer between the elements, which are themselves parts of a system.
+
+
+Both OO and FP are largely single-thread paradigms. 
+FBP offers vertical integration, along the "stream", 
+wheras MR increases the width of the stream. 	

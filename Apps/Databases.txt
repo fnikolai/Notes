@@ -1,0 +1,22 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-26T19:22:11+01:00
+
+====== Databases ======
+Created Thursday 26 January 2017
+
+
+==== Transactional DB (On-line Transaction Processing - OLTP) ====
+* time critical that  provide source data to data warehouses
+* large number of short on-line transactions (INSERT, UPDATE, DELETE). 
+* maintaining data integrity in multi-access environments and an effectiveness measured by number of transactions per second
+
+==== Analytical  DB (On-line Analytical Processing - OLAP) ====
+* analyze data of data warehouses (widely used by Data Mining techniques)
+	* aggregated, historical data, stored in multi-dimensional schemas (usually star schema). 
+* low volume of transactions, 
+* Queries are often very complex and involve aggregations,  response time is an effectiveness measure. 
+
+
+===== Archive DB =====
+* Can be accessed if demand arises

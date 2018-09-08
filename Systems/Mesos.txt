@@ -1,0 +1,20 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-04-23T18:53:31+02:00
+
+====== Mesos ======
+Created Sunday 23 April 2017
+
+When launching a task, you can create a volume that exists outside the task’s sandbox and will persist on the node even after the task dies or completes.
+
+Persistent volumes can only be created from reserved disk resources, whether it be statically reserved or dynamically reserved. A dynamically reserved persistent volume also cannot be unreserved without first explicitly destroying the volume. These rules exist to limit accidental mistakes, such as a persistent volume containing sensitive data being offered to other frameworks in the cluster. Similarly, a persistent volume cannot be destroyed if there is an active task that is still using the volume.
+
+
+Persistent volumes can also be created on isolated and auxiliary disks by reserving multiple disk resources.
+
+
+By default, a persistent volume cannot be shared between tasks running being managed by different executors: that is, once a task is launched using a persistent volume, that volume will not appear in any resource offers until the task has finished running. Shared volumes are a type of persistent volumes that can be accessed by multiple tasks at the same agent simultaneously; see the documentation on shared volumes for more information.
+
+
+/create-volumes
+To use this endpoint, the operator should first ensure that a reservation for the necessary resources has been made on the appropriate agent (e.g., by using the /reserve HTTP endpoint or by configuring a static reservation). The infor

@@ -1,0 +1,62 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-21T19:56:28+01:00
+
+====== management ======
+Created Saturday 21 January 2017
+
+===== Links =====
+[[+nonFunctional]]
+[[+state]]
+
+
+
+===== Features =====
+* backend selection based on nature of data
+
+
+
+===== Patterns =====
+
+==== Temporal read ====
+
+
+==== read-once write-many (WORM) ====
+* Traditionally used on non-erable and non-rewritable storage media
+* provides easy-to-deploy, robust, long-term data archival protection through open industry standard protocols.
+* deal for storing large amounts of electronic data and fits nicely between online primary storage and offline secondary tape storage. Primary online storage is the storage of choice for performance-critical OLTP applications. Offline tape storage remains useful for archival of records that are infrequently accessed and to protect against disasters.
+
+=== Data protection ===
+* provide long-term, "read-only" protection for data. 
+* Applications can write data to the disk but are not allowed to make any changes after the data is frozen. 
+* Locking mechanisms are controlled by the application at either the file-level or the volume-level and freeze the data as "read-only". 
+* The data remains secure and easily accessible and cannot be altered for the life of the record, a mandatory requirement of SEC Rule 17a-4.
+	* content addressed storage (CAS) can be used to ensure data are not tampered (data tampering is different from data corruption, in the sense that tamper creates a new write request while corruption can be silent)
+
+=== Data integrity ===
+* Many types of reference information require that the data not degrade over time.
+* Using the fingerprint that Centera creates for each record, a periodic check can verify that the data is still in its original condition. 
+* Each object is protected from silent data corruption caused by storage element failures through evaluation of a
+checksum, which is checked each time the data are served. 
+
+=== Data Retention ===
+* Freedom of Information Act require that the record be completely expunged from the disk.
+* The EMC Centera allows the application to delete the record after the retention period has expired. 
+
+
+
+
+
+===== Database analogy (Just leave it here) =====
+
+This contrast is not unique to distributed networking. Storage faces similar challenges. Before databases, storage systems were files with application-defined structure. That is simpler, but offered no basis for tools, consistency, or integration. The database arose as a data-centric infrastructure technology that provides one key benefit: a source of consistent truth.
+
+Databases offer a clean conceptual interface to data: create, read, update, and delete (sometimes called CRUD). By enforcing structure and simple rules that control the data model, databases ensure consistency. By exposing the structure to all users, databases greatly ease system integration.
+
+Like a database, data-centric middleware imposes known structure on the transmitted data. The infrastructure, and all its associated tools and services, can now access the data through CRUD-like operations. Clear rules govern access to the data, how data in the system changes, and when participants get updates. As in databases, this accessible source of consistent truth greatly eases system integration. Thus, the data-centric distributed "databus" does for data in motion what the structured database does for data at rest.
+
+
+
+===== MULTI-TENANCY VS. MULTI-INSTANCE =====
+
+If you are unfamiliar with the terms, multi tenancy commingles the data and processing for multiple clients in a single application instance. By contrast, a multi instance architecture uses one application instance per client. 

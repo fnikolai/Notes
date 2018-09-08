@@ -1,0 +1,28 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-08-30T15:20:32+02:00
+
+====== Sirocco ======
+Created Wednesday 30 August 2017
+
+
+
+While current POSIX-centric file systems for HPC
+are geared toward traditional scientific computing workloads,
+data analytics applications are becoming a more prominent
+consumer of compute cycles on large-scale computers.
+
+
+. This design is adherent to the Lightweight
+File System’s [2] philosophy, which uses a minimal storage
+system with authentication and authorization. Other services,
+such as naming and locking, are separate components.
+
+
+Another differentiating feature of Sirocco is that it includes
+storage interfaces and support that are more advanced than
+typical storage systems. For example, Sirocco enables clients
+to efficiently use the key-value or bulk storage paradigm with
+the same interface. It also provides several levels of transactional
+data updates within a single storage command, up
+to and including ACID-compliant updates. T

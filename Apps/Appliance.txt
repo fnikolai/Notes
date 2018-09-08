@@ -1,0 +1,25 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-10T16:22:10+01:00
+
+====== Appliance ======
+Created Friday 10 March 2017
+
+Software appliances have several benefits over traditional software applications that are installed on top of an operating system:
+
+* **Simplified deployment**:  A software appliance encapsulates an application's dependencies in a pre-integrated, self-contained unit. This can dramatically simplify software deployment by freeing users from having to worry about resolving potentially complex OS compatibility issues, library dependencies or undesirable interactions with other applications. This is known as a "toaster."
+
+* **Improved isolation**: software appliances are typically used to run applications in isolation from one another. If the security of an appliance is compromised, or if the appliance crashes, other isolated appliances will not be affected.
+
+* **Improved performance**: A software appliance does not embed any unused operating system services, applications or any form of bloatware hence it does not have to share the hardware resources (CPU, memory, storage space, ...) usually consumed by these on a generic OS setup. This naturally leads to faster boot time and application execution speed. In the case where multiple software appliances share and run simultaneously on the same hardware (on a virtualization platform for example) this will not hold true as running n instances of a software appliance (OS + software application) will consume more hardware resources than running n instances of a software application on 1 instance of an operating system due to the overhead of running n - 1 more instances of operating system.
+
+https://en.wikipedia.org/wiki/Software_appliance
+
+===== Just enough operating system =====
+
+* paradigm for customizing operating systems to fit the needs of a particular application such as for a software appliance. 
+	* The platform only includes the operating system components required to support a particular application and any other third-party components contained in the appliance, (e.g., the kernel). 
+	* Applicates are smaller, faster (to boot and to execute the particular application) and potentially more secure than an application running under a full general-purpose OS.
+
+
+http://blogs.vmware.com/console/2007/07/get-juiced.html

@@ -1,0 +1,20 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-22T22:16:04+01:00
+
+====== metadata ======
+Created Sunday 22 January 2017
+
+* Identifiers
+	* Random (high level assigned) UUID
+	* Content hashing
+
+* To ensure **citable and attributable** data, rules are needed to support versioning of files and assignment of Global Unique Identifiers (GUIDs), and provide access to files through a URL. 
+
+* To ensure  **identifiable, retrievable and available** data, rules can be used to organize the data in a collection hierarchy, and enforce retention and disposition strategies.
+
+* Rules are also required in order to **secure** data from loss and degradation by assigning an owner to each file, defining access controls for public and shared use, verifying the number of replicas and the integrity of the data, as well as for tracking the chain of custody.
+
+* Policy-based data management systems rely on the formation of a consensus for the desired properties of a collection. This is needed for all types of data management applications. Given the desired property (i.e., integrity), management policies can be defined for each collection
+
+* Retaining accessible data for an extended duration is nontrivial. Object storage is common for the task. An object storage system can execute policies that dictate geographical data replication and placement.

@@ -1,0 +1,35 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-07-26T01:28:28+02:00
+
+====== ACID ======
+Created Wednesday 26 July 2017
+
+* ACID is pessimistic and forces consistency at the end of every operation
+* Uses 2PC (two-phase commit) to provide guarantess across multiple database instances
+
+**Atomicity**
+	All of the operations in the transaction will complete, or none will.
+	With 2PC (two-phase commit) it is possible for a transaction to be rejected before even starting 
+
+**Consistency**
+	The database will be in a consistent state when the transaction begins and ends.
+	Consistency is that when a transaction is taking place on a database item, then access to it should not be allowed to other users during that transaction.
+
+**Isolation**
+	The transaction will behave as if it is the only operation being performed upon the database.
+	Isolation is that multiple transactions taking place on a single database item should not affect each other.
+
+**Durability**
+	Upon completion of the transaction, the operation will not be reversed.
+	Durability is that if through one transaction a database item is updated, added or deleted, it is accessible to everyone. After a transaction completes successfully, it makes that system consistent and if the system crashes then the change in database item is not lost.
+
+* If the above listed four conditions are met only then there is data integrity.
+* But they are not protected againt race conditions
+
+
+===== Isolation vs consistency =====
+* Isolation guarantess no interference among different transactions
+* Consistency defines the "order" for these transactions
+
+For instance, isolation guarantess that different transactions will be written in different locations. Consistency guarantess place the order between the transactions (assign a version)

@@ -1,0 +1,32 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-02T02:07:08+01:00
+
+====== Multitier ======
+Created Thursday 02 March 2017
+
+* client–server architecture in which presentation, application processing, and data management functions are physically separated
+* N-tier application architecture provides a model by which developers can create flexible and reusable applications.
+* By segregating an application into tiers, developers acquire the option of modifying or adding a specific layer, instead of reworking the entire application.
+* A three-tier architecture is typically composed of a presentation tier, a domain logic tier, and a data storage tier.
+* a layer is a logical structuring mechanism for the elements that make up the software solution, while a tier is a physical structuring mechanism for the system infrastructure
+
+* In other words, a layer is a group of reusable components that are reusable in similar circumstances.
+
+
+==== Components (of three tier) ====
+
+=== Presentation ===
+	* Presentation layer (a.k.a. UI layer, view layer, presentation tier in multitier architecture)
+	* This is the topmost level of the application. 
+	* Displays information related to such services as browsing merchandise, purchasing and shopping cart contents.
+	* It is a layer which users can access directly (such as a web page, or an operating system's GUI).
+
+=== Application ===
+	* Application layer (a.k.a. service layer[5][6] or GRASP Controller Layer [7])
+	* The logical tier is pulled out from the presentation tier and, as its own layer, it controls an application’s functionality by performing detailed processing.
+
+=== Data ===
+* The data tier includes the data persistence mechanisms (database servers, file shares, etc.) and the data access layer that encapsulates the persistence mechanisms and exposes the data. 
+* Should provide an API to the application tier that exposes methods of managing the stored data without exposing or creating dependencies on the data storage mechanisms. 
+* Avoiding dependencies on the storage mechanisms allows for updates or changes without the application tier clients being affected by or even aware of the change. As with the separation of any tier, there are costs for implementation and often costs to performance in exchange for improved scalability and maintainability.

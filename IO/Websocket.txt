@@ -1,0 +1,22 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-04-27T11:33:39+02:00
+
+====== Websocket ======
+Created Thursday 27 April 2017
+
+
+* The idea behind the WebSocket protocol consists of reusing the established TCP connection between a Client and Server. 
+	* Creates full-duplex channel between client and server. On the other hand, HTTP treat each message separately and state keeping was necessary
+
+
+* Behind the scenes WebSocket rebuilds the TCP frames in consistent envelopes/messages. The full-duplex channel is used by the Server to push updates towards the Client in an asynchronous way: the channel is open and the Client can call any futures/callbacks/promises to manage any asynchronous WebSocket received message.
+
+* WebSockets typically run from browsers connecting to Application Server over a protocol similar to HTTP that runs over TCP/IP. 
+
+* The other limitation with HTTP was that it was a “pull” paradigm. The browser would request or pull information from servers, but the server couldn’t push data to the browser when it wanted to. This means that browsers would have to poll the server for new information by repeating requests every so many seconds or minutes to see if there was anything new.
+
+
+* REST is by far the most standardized way of structuring the API for Requests. But since it involves using HTTP is also has the overhead associated with that protocol.
+
+* With WebSockets, the receipt of a message is event driven (you generally register a message handler routine), and the data in the event is always the entire message that the other side sent.

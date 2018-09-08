@@ -1,0 +1,16 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-07-26T19:13:44+02:00
+
+====== Abstractions ======
+Created Wednesday 26 July 2017
+
+
+===== Leaky abstractions =====
+* A leaky abstraction is an abstraction that exposes details and limitations of its underlying implementation to its users that should ideally be hidden away. L
+
+==== Examples ====
+* Unprotected against certain cases (e.g TCP cannot deliver if network is down)
+* Different delays on different access patterns
+
+* The SQL language is meant to abstract away the procedural steps that are needed to query a database, instead allowing you to define merely what you want and let the database figure out the procedural steps to query it. But in some cases, certain SQL queries are thousands of times slower than other logically equivalent queries. A famous example of this is that some SQL servers are dramatically faster if you specify “where a=b and b=c and a=c” than if you only specify “where a=b and b=c” even though the result set is the same. You’re not supposed to have to care about the procedure, only the specification. But sometimes the abstraction leaks and causes horrible performance and you have to break out the query plan analyzer and study what it did wrong, and figure out how to make your query run faster.

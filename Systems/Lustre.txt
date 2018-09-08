@@ -1,0 +1,99 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-21T23:56:52+01:00
+
+====== Lustre ======
+Created Saturday 21 January 2017
+
+===== Overview =====
+
+* The ability of a Lustre file system to scale capacity and performance for any need reduces the need to deploy many separate file systems, such as one for each compute cluster
+* Storage management is simplified by avoiding the need to copy data between compute clusters.
+* Aggregating storage capacity of many servers, the I/O throughput is also aggregated and scales with additional servers.
+* throughput and/or capacity can be easily increased by adding servers dynamically.
+* In Lustre, storage is only attached to the server nodes, not ot the client nodes
+
+{{./pasted_image.png?width=415}}
+
+
+==== Flow ====
+1. When Client requests to write a file, sends the request to MDS
+2. MDS authenticates the request, and send back a list of OST that the client can use to write the file
+3. Then, the client interacts exclusively with the assigned OSTs without going through the MDS again
+	* Because clients and OST run on the same environment, access can be through RDMA
+
+* NOTE: Stripping, replication etc etc are handled by the client (inteface). The MDS simply returns the locations of available storage resources
+
+
+===== Components =====
+
+{{../../figs/lustre.png}}
+
+
+{{./pasted_image001.png?width=800}}
+
+
+{{./pasted_image003.png}}
+
+=== Metadata Server (MDS) ===
+* The MDS makes metadata stored in one or more MDTs available to Lustre clients. Each MDS manages the names and directories in the Lustre file system(s) and provides network request handling for one or more local MDTs.
+* One MDS per filesystem manages one metadata target (MDT). 
+* High through to the MDS storage is not important (the metadata access pattern is many seeks and read-write operations of small amounts of data)
+* **Configured as active/passive pair**
+* **Often, the standby MDS is the active MDS for another Lustre filesystem, so there are no nodes idle in the cluster**
+* For Lustre 2.4 and beyond, this can be extended to multiple pairs of active/activemetadata servers (distributed namespace servers, or DNE)
+
+
+=== Metadata Target (MDT) ===
+* The MDT stores metadata (such as filenames, directories, permissions and file layout) on storage attached to an MDS. Each file system has one MDT. An MDT on a shared storage target can be available to multiple MDSs, although only one can access it at a time
+* Uses journaling file systems
+* Usually a single RAID10 array for maximum redundancy
+
+=== Object Storage Servers (OSS) ===
+* The OSS provides file I/O service, and network request handling for one or more local OSTs. Typically, an OSS serves between 2 and 8 OSTs, up to 16 TB each. A typical configuration is an MDT on a dedicated node, two or more OSTs on each OSS node, and a client on each of a large number of compute nodes.
+* Each OSS manages one or more object storage targets (OSTs), and OSTs store file data objects. 
+* Often OSS servers do not use internal drivers, but instead use a storage array attached over FC or SAS connections
+* Configures as active/active to provide redundancy without extra overhead
+* Shared storage (different OSS point to the same OST) enables failover
+
+=== Object Storage Target (OST) ===
+* User file data is stored in one or more objects, each object on a separate OST in a Lustre file system. The number of objects per file is configurable by the user and can be tuned to optimize performance for a given workload.
+* Usually a RAID5 or RAID6 array used to store the actual data
+
+=== Lustre Clients ===
+* Lustre clients are computational, visualization or desktop nodes that are running Lustre client software, allowing them to mount the Lustre file system.
+
+TODO: understand how lustre MDS and MDT works. Actually it can be quite similar to tromos
+
+
+==== Callbacks ====
+
+
+=== locking ===
+* There are two conditions where this callback will be invoked. First, if a client requests a lock conflicting with this one (even if the request comes from the same client), then this callback is invoked, so that if this client plays “nice” and has no use for this lock anymore, it can release the lock and let the other party have it. The second case is when a lock is revoked (after all references went away and the lock was cancelled). 
+
+=== completion ===
+* There are also two cases in which this callback will be invoked: first, if the lock requested is granted; second, if the lock is converted, for exam-ple, to a different mode. 
+
+=== glimpse ===
+* This callback is used to provide certain information about underlying properties without actually releasing the lock. For example, an OST can provide such a callback to provide information on file size since only the OSTs know exactly the size of a file object. This callback is then associated with the extent lock on the file object and is invoked by the server upon receiving the client request. 
+
+==== Features ====
+
+=== Interoperability ===
+	* Run on multiple architectures
+
+=== Access control lists (ACL) ===
+	* The security model is that of a UNIX file systen with POSIX ACLs
+
+=== Quota ===
+	* User and group quotes
+
+=== Controlled striping ===
+	* Default strip determined at format time
+	* Also fine-grained per directory and file
+
+=== Snapshots ===
+	* Utility to create an integrated snapshot of all volumes
+	* Similarly, there is an embedded tool for backup
+

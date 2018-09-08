@@ -1,0 +1,8 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-24T01:32:58+01:00
+
+====== Blockchain ======
+Created Tuesday 24 January 2017
+
+A blockchain is a distributed database that maintains a continuously-growing list of ordered records called blocks. Each block contains a timestamp and a link to a previous block. By design blockchains are inherently resistant to modification of the data — once recorded, the data in a block cannot be altered retroactively. 

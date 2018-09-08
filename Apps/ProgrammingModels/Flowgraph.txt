@@ -1,0 +1,22 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-14T11:23:55+01:00
+
+====== Flowgraph ======
+Created Tuesday 14 March 2017
+
+
+
+https://github.com/vectaport/flowgraph.wiki.git
+
+The flowgraph package supports an explicit upstream request (acknowledge or ack for short) for the next data to flow instead of relying on a blocking write to a channel. A channel is essentially a circular FIFO (or buffer) of a given type, and the channel used for transmitting acknowledges is of type struct{}, the zero-size empty struct. So the overhead is minimal to transmit an ack between two Node's in a flowgraph. But it is tempting to try to live without them since a blocking write seems of equal effectiveness in coordinating traffic.
+
+But is it? The first advantage to using acks is that every Node (every goroutine) only blocks on channel reads in a reflect.Select call (the reflection package equivalent to the language select statement). Goroutines are a computing resource, and ensuring that they remain ready to respond to any possible input keeps them alive and ready to fire with low latency. With acks a Node goroutine only leaves the select switch when it has a guarantee that it will get back to the select switch in a finite time. It does this by waiting for the acks from downstream that guarantee that any write to downstream will be read by the downstream node in the near future. Not immediately (because the Node goroutine might have to finish its own guaranteed-to-finish writes and other work), but guaranteed to finish soon enough without possibility of an endless delay.
+
+If every Node behaves this way, no channel write is undertaken that can lead to deadlock. The question that must be answered before undertaking a channel write is if doing this write could be the very reason why the write will never finish (because it would block, which would not allow this goroutine to respond to something else which might be required for the block to ever lift). Knowing there is a guarantee (maintained by acks) that any write will complete removes this possibility.
+
+Gridlock, on the other hand, is a problem that needs to be managed by higher-level acks, cycle closing communications that guarantee all empty space (or bubbles) do not disappear from the flowgraph. It helps to realize that the cyclic structure of a ring of flowgraph Node's works on the same principles as the cyclic structures made between handshaking Node's in a pipeline. In the latter the cycle closing communication can be a zero-size empty struct. In the former it can be a zero-size empty struct or anything else -- what matters is that the back-pressure of the cycle-closing "acknowledge" must be waited for.
+
+Another way to look at this -- what is the most efficient way to wake up a sleeping computing resource in general, whether waiting on upstream/downstream goroutines or upstream/downstream remote connections? Unblocking a write seems to be a preferred method and rather efficient given Go's channel mechanism, but this has the problem that the computing resource is sidelined, perhaps permanently, and can not respond to any other incoming messages of any type. Why should the direct upstream neighbors of a particular blocked goroutine have to be blocked as well? The blocking spreads like wildfire, wreaking havoc on efficiency and perhaps leading to deadlock or gridlock. And recovering from a chain of blocks is like starting from a standstill on the freeway -- everything can't start flowing immediately, the wave of empty space has to propagate backward one node (goroutine) at a time. Instead, it seems more efficient to sleep waiting for incoming data or acknowledges from active neighbors.
+
+One more not so small point. There is a difference between back-pressure which these acks provide and the ability to do some forward-flow. If you can test for the possibility of a write completing (by checking cap and len primitives on a channel), you can avoid a blocking write. But to avoid a busy-wait polling the goroutine must wait in a select statement, but on what? cap>len is not an event you can wait on. But you can wait for an ack from downstream (the reader).

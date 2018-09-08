@@ -1,0 +1,13 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-07-26T01:28:44+02:00
+
+====== Atomicity ======
+Created Wednesday 26 July 2017
+
+* guaranteed to be all-or-nothing. 
+* With an atomic transaction – you just put both your operations under the same Atomic transaction – and have a guarantee (from your DB) that whatever-happens, the whole transaction will either succeed, or fail
+
+===== Atomicity over multiple objects =====
+* One very important point about atomicity, is that your DB should allow you to have transactions involving multiple objects (such as rows).
+* Contrary to implications from [MySQL.AtomicOperations], simply using incremental UPDATE statements is NOT sufficient to guarantee data integrity (in particular, if your server or app fails in between the two UPDATEs 

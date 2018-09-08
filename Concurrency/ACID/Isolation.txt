@@ -1,0 +1,37 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-07-26T01:25:13+02:00
+
+====== Isolation ======
+Created Wednesday 26 July 2017
+
+* describes how a database protects an application from concurrency problems (race conditions).
+
+
+===== Isolation Level =====
+* The isolation level is part of the database’s API. 
+	* Transactions specify an isolation level that **defines the degree to which one transaction must be isolated** from resource or data modifications made by other transactions. 
+	* Isolation level **does not affect the locks acquired to protect data modifications**. 
+		* A transaction always gets an exclusive lock on any data it modifies, and holds that lock until the transaction completes, regardless of the isolation level set for that transaction. 
+	* For read operations, transaction isolation levels primarily define the level of protection from the effects of modifications made by other transactions.
+		* Isolation levels are described in terms of **which concurrency side-effects, such as dirty reads or phantom reads, are allowed.**
+
+* Each isolation level defines:
+	* Whether locks are taken when data is read, and what type of locks are requested
+	* How long the read locks are held
+	* Whether a read operation referencing rows modified by another transaction
+		* Blocks until the exclude lock on the row is freed 
+		* Retrieves the committed version of the row that existed at the time the statement or transaction started.
+		* Reads the uncommitted data modification.
+
+==== Decision ====
+* A **lower isolation** level increases the ability of **many users** to access data at the same time, but increases the number of **concurrency effects** (such as dirty reads or lost updates) users might encounter.
+* A **higher isolation** level reduces the types of **concurrency effects** that users may encounter, but requires **more system resources** and increases the chances that one **transaction will block another**.
+
+
+
+===== Deadlocks =====
+
+* Common both to lockbased and mvcc
+* In multi-threading, this problem is non-recoverable; in DB world, deadlocks are routinely detected by RDBMS, and one of the transactions is rolled back forcefully (and application can get an error, and re-try the transaction using new version of the data involved).
+* To deal with deadlocks, it is common to establish one common order of obtaining locks; if everybody follows this order – there can be possibly no deadlocks. On the other hand, ensuring that all the transactions follow the same lock order – is also a thing which is usually found only by code review 🙁 (however, detecting lock order violations at least CAN be implemented in a testable manner).

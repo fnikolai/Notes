@@ -1,0 +1,29 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-04T12:03:55+01:00
+
+====== Component-based ======
+Created Saturday 04 March 2017
+
+* Component-based software engineering (CBSE), also known as component-based development (CBD), is a branch of software engineering that emphasizes the separation of concerns with respect to the wide-ranging functionality available throughout a given software system.
+* It is a reuse-based approach to defining, implementing and composing loosely coupled independent components into systems.
+
+* An individual software component is a software package, a web service, a web resource, or a module that encapsulates a set of related functions (or data).
+
+* With regard to system-wide co-ordination, components communicate with each other via interfaces.
+
+* This interface can be seen as a signature of the component - the client does not need to know about the inner workings of the component (implementation) in order to make use of it. 
+
+* Another important attribute of components is that they are substitutable, so that a component can replace another (at design time or run-time), if the successor component meets the requirements of the initial component (expressed via the interfaces). 
+	* Consequently, components can be replaced with either an updated version or an alternative without breaking the system in which the component operates.
+
+
+* It takes significant effort and awareness to write a software component that is effectively reusable. The component needs to be:
+	* fully documented
+	* thoroughly tested
+	* robust - with comprehensive input-validity checking
+	* able to pass back appropriate error messages or return codes
+	* designed with an awareness that it will be put to unforeseen uses
+
+
+* it is desirable to build complex system by assembling highly cohesive loosely coupled large components, where cost of redesigning each of such adoptable components (or replacing by a better component) must be minimized.

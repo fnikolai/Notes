@@ -1,0 +1,35 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-24T12:58:15+01:00
+
+====== QIO ======
+Created Tuesday 24 January 2017
+
+* I/O operations on these systems are initiated by issuing a QIO call to the kernel. There are two types of QIO - Queue I/O, and Queue I/O and Wait.
+
+=== Queue I/O ===
+
+* the call returns immediately.
+* If the request is successfully enqueued, the actual operation occurs asynchronously. 
+* On completion, status is returned in the QIO status doubleword.
+* The QIO request may also specify that completion set an event flag or issue an Asynchronous System Trap (AST).
+
+=== Queue I/O and Wait ===
+
+* allows synchronous I/O
+* In this case, the wait-for-event-flag operation is combined so the call does not return until the I/O operation completes or fails.
+
+===== QIO arguments =====
+
+* The event flag to set when the operation completes. 
+* The channel, a small integer previously associated with the device.
+* The function code to be performed. 6 bits are assigned to the basic code (such as read, write), with a further 10 bits for "modifiers" whose meaning depend on the basic code.
+* The optional I/O status block (IOSB), which is cleared by the QIO call, and filled in on completion of the I/O operation.
+* The optional AST routine to invoke when the operation completes.
+
+===== QIO completion =====
+There are three different ways to sense when the queued I/O operation has completed:
+
+* When the event flag becomes set.
+* When the first two bytes of the IOSB become nonzero.
+* When the AST routine executes.

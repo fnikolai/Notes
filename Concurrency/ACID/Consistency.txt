@@ -1,0 +1,91 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-04-12T14:11:45+02:00
+
+====== Consistency ======
+Created Wednesday 12 April 2017
+
+* A system is different than a model. If a system (implementation) obeys the rules set by the model we say that the system satisfies the model
+
+* A thread, a process–in the logical sense, anyway–is a constraint over the history: operations belonging to the same thread must take place in order. Logical threads impose a partial order over the allowed operations.
+
+* We must relax our consistency model to usefully describe concurrency. Now, a process is allowed to read the most recently written value from any process, not just itself. The register becomes a place of coordination between two processes; they share state.
+
+
+* The first are often termed wall clocks, which correspond roughly to the time obtained by looking at a clock on the wall. Most commonly, a process finds the wall-time clock via gettimeofday(), 
+* When wall clocks are not properly coupled to the operations in the system, causal constraints can be violated. To ensure safety properties hold all the time, rather than probabilistically, you need logical clocks.
+
+* Cassandra provides session consistency for timestamps, which means that a process which accesses the database in the context of a session is guaranteed to always read its latest write or one with a higher timestamp. There is, however, no guarantee about the visibility of writes to other nodes. This suggests an important caveat: clients of the service will not read their own writes unless they too maintain an open session (e.g. over a TCP connection) with a particular app server.
+
+
+* The only way someone can distinguish between linearizable and sequential consistency is if they can observer all the inputs and timings goings into the system: from the client perspective interfacting with a node, the two are equivalent
+
+http://cloudacademy.com/blog/consistency-models-of-amazon-cloud-services/
+
+* Consistency defines which version (arbitrary in mvcc, latest in locking) will be access
+
+
+
+===== Data centric =====
+* Maintains a globally-accessible and globally-consistent data store
+
+
+ **Strict Consistency**
+Absolute time ordering of all shared accesses matters
+
+ **Linearizability (strong) Consistency**	
+* All processes must see all shared accesses in the same order.  Accesses are furthermore ordered according to a (non-unique) global timestamp
+* Capable of maintaining a single copy
+* Strong consistency guarantee that the apparent order and visibility of updates is equivalent to a non-replicated system
+
+**Sequential Consistency**	
+All processes see all shared accesses in the same order.  Accesses are not ordered in time
+
+ **Causal Consistency**
+All processes see causally-related shared accesses in the same order.
+
+ **FIFO Consistency**
+All processes see writes from each other in the order they were used.  Writes from different processes may not always be seen in that order
+
+ **Weak Consistency**
+* Shared data can be counted on to be consistent only after a synchronization is done
+* Client-centric consistency models
+* Eventual consistency models
+
+ **Release Consistency**
+Shared data are made consistent when a critical region is exited
+
+ **Entry Consistency**
+Shared data pertaining to a critical region are made consistent when a critical region is entered.
+
+
+===== Client-centric consistency models =====
+* Instead of a globally-consistent view, maintains consistent views for individual clients
+	* Easier to deal with incosistencies
+	* Are models taht involve the notion ofa client or session
+	* For example a client-centric model might guarantee that a client will never see older versions of a data item.
+
+* Client‐centric consistency provides guarantees for a single client concerning the consistency of accesses to a data store by that client
+
+* **Monotonic reads**: 
+	* Once read, subsequent reads on that data item return same or more recent values
+	* If a client reads a data entry X, any successive read of X by the same client returns the same value or a more recent value
+* **Monotonic writes: ** 
+	* A write must be propagated to all replicas before a successive write by the same process Resembles FIFO consistency (writes from same process are processed in same order)
+	* If a client first peroforms Write1 then Write2, Write1 is ordered and executed before WRite2 on all copies of the data
+* **Read your writes: **
+	* read(x) always returns write(x) by that process
+	* The effect of a write operation by a client on a data entry X will always be seen by a successive read operation on X by the same client
+	* Is achieved when the system guarantees that, once a record has been updated, any attempt to read the record will return the updated value.
+
+The core ideas of RYW consistency, as implemented in various NoSQL systems, are:
+
+Let N = the number of copies of each record distributed across nodes of a parallel system.
+Let W = the number of nodes that must successfully acknowledge a write  for it to be successfully committed. By definition, W <= N.
+Let R = the number of nodes that must send back the same value of a unit of data for it to be accepted as read by the system. By definition, R <= N.
+The greater N-R and N-W are, the more node or network failures you can typically tolerate without blocking work.
+As long as R + W > N, you are assured of RYW consistency.
+
+* **Writes follow reads:** 
+	* write(x) following read(x) will take place on same or more recent version of x
+	* The client makes a write operations: WRite1, Then, it eventually observes result of WRite1 with a ReadX which is not necessarily the successive operation of WRite1. After ReadX, the client makes a new write: Write2. On all copies, write1 is ordered and executed before write

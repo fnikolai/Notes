@@ -1,0 +1,19 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-02T01:59:43+01:00
+
+====== PAC ======
+Created Thursday 02 March 2017
+
+Presentation–abstraction–control (PAC)
+
+{{./pasted_image.png?width=400}}
+
+* PAC is used as a hierarchical structure of agents, each consisting of a triad of presentation, abstraction and control parts
+* The agents (or triads) communicate with each other only through the control part of each triad. 
+
+=== Components ===
+* The abstraction component retrieves and processes the data
+* The presentation component formats the visual and audio presentation of data
+* the control component handles things such as the flow of control and communication between the other two component
+

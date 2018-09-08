@@ -1,0 +1,32 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-24T12:48:29+01:00
+
+====== Architecture ======
+Created Tuesday 24 January 2017
+
+
+===== Topologies =====
+[[+centralized]]
+[[+decentralized]]
+[[+distributed]]
+{{./pasted_image.png}}
+
+===== Data placement =====
+[[+shareNothing]]
+[[+sharedDisk]]
+
+
+===== Points =====
+* **Points of Failure / Maintenance** : Centralized systems are easy to maintain as there is only a single point of failure. Decentralized have more but still finite. Distributed systems are the most difficult to maintain.
+* **Fault Tolerance / Stability** : Centralized can be highly unstable. Kill the leader and there will be chaos. Kill the leader for a decentralized system and you will have many decentralized systems. Distributed systems are very stable and a single failure doesn’t do much harm.
+* **Scalability / Max Population** : Centralized — low scalability, Decentralized — Moderate, Distributed — Infinite.
+* **Ease of development / Creation** : Centralized systems can be created really fast, you pick up a framework and apply it everywhere. For Decentralized and Distributed, you have to first work out the lower level details like resource sharing (trade) and communications (transport).
+* **Evolution / Diversity** : Since centralized systems follow a single framework, they don’t have diversity and evolve slowly. But for Decentralized and Distributed systems, once the basic infrastructure is in place, evolution is tremendous.
+
+
+===== Usages =====
+* If you want to grow fast and scale is not a concern, go for centralized.
+* If you are solving a problem of scale and not in hurry, choose distributed. If in hurry, choose decentralized.
+* If you have a strong leader, choose centralized. But if you have good managers, then choose decentralized and if you have a lot of individual contributors, then choose distributed.
+

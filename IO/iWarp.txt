@@ -1,0 +1,10 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-28T22:10:43+01:00
+
+====== iWarp ======
+Created Saturday 28 January 2017
+
+* The Internet Wide Area RDMA Protocol (iWARP) is an Internet Engineering Task Force (IETF) update of the RDMA Consortium’s RDMA over TCP standard. 
+* Because a kernel implementation of the TCP stack is a tremendous bottleneck, a few vendors now implement TCP in hardware. 
+* Like InfiniBand, iWARP does not have a standard programming interface, only a set of verbs. Unlike IBA, iWARP only has reliable connected communication as this is the only service that TCP and SCTP provide. The iWARP specification also omits many of the special features of IBA, such as atomic remote operations.

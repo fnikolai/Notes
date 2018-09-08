@@ -1,0 +1,19 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-02T01:55:51+01:00
+
+====== MVVM ======
+Created Thursday 02 March 2017
+
+{{./pasted_image.png}}
+
+Model–view–view-model (MVVM) 
+
+The view model of MVVM is a value converter;[1] meaning the view model is responsible for exposing (converting) the data objects from the model in such a way that objects are easily managed and presented. In this respect, the view model is more model than view, and handles most if not all of the view's display logic
+
+=== Components ===
+
+* Model refers either to a domain model, which represents real state content (an object-oriented approach), or to the data access layer, which represents content (a data-centric approach)
+* As in the MVC and MVP patterns, the view is the structure, layout, and appearance of what a user sees on the screen. 
+* The view model is an abstraction of the view exposing public properties and commands. Instead of the controller of the MVC pattern, or the presenter of the MVP pattern, MVVM has a binder. In the view model, the binder mediates communication between the view and the data binder. The view model has been described as a state of the data in the model.[7]
+* Binder: Declarative data- and command-binding are implicit in the MVVM pattern. In the Microsoft solution stack, the binder is a markup language called XAML.[8] The binder frees the developer from being obliged to write boiler-plate logic to synchronize the view model and view. When implemented outside of the Microsoft stack the presence of a declarative databinding technology is a key enabler of the pattern.[4][9][clarification needed]

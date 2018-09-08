@@ -1,0 +1,33 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-07-26T01:22:31+02:00
+
+====== LockBased ======
+Created Wednesday 26 July 2017
+
+
+===== Isolation level =====
+
+=== Read Uncommitted ===
+* At Read Uncommitted transaction isolation level, writing within transaction sets write lock only while the row is being modified, and lifts it immediately afterwards. 
+* Reading within transaction sets read lock only while the data is being read.
+* “dirty data” are possible. data which has been updated by a transaction – but as modifying transaction is not committed yet, transaction including all the modifications, may be still rolled back (which, unless you’re careful, can cause all kinds of inconsistencies).
+* Within nosql database is possible that DB can show you a partially-updated data object/row
+
+=== Read Committed ===
+* At Read Committed transaction isolation level, writing within transaction sets write lock (on the data/rows written) which is kept until the transaction is terminated (either committed or rolled back).
+* No “dirty reads”. However, if two exactly the same reads are issued within the same transaction, results may be different. 
+* In particular, both so-called non-repeatable reads, i.e. reading of data modified between different queries, and phantom reads, i.e. reading of rows which were added by other transaction after this one was started, are possible
+
+=== Repeatable Reads ===
+* At Repeatable Reads transaction isolation level, in addition to locks above, DB also locks data after reading it – and keeps the lock until the transaction is terminated. R
+* Eliminates both “dirty reads” and “non-repeatable reads”, but is still open to “phantom reads”. 
+* Repeatable Reads isolation is rarely used for OLTP-style lock-based databases, due to performance issues it tends to cause
+
+=== Serializable ===
+Serializable transaction isolation level eliminates “phantom reads”, at the cost of requiring even more locks than Repeatable Reads
+
+
+
+
+{{./pasted_image.png}}

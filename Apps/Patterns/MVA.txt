@@ -1,0 +1,19 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-02T02:14:24+01:00
+
+====== MVA ======
+Created Thursday 02 March 2017
+
+{{./pasted_image.png?width=400}}
+
+* Model–view–adapter (MVA) or mediating-controller MVC
+
+* Allows to change the user interface will not affect data handling and   reorganize data  without changing the user interface. 
+* The model–view–adapter solves this rather differently from the model–view–controller by arranging model, adapter or mediating controller and view linearly without any connections whatsoever directly between model and view.
+
+
+* === Multiple adapters between the same model-view pair ===
+
+* Multiple adapters may be created to change the way one view presents data for a given model. 
+* For example, different governments (either among different states of the USA or different nation-states internationally) may impose different codes of law, that in turn impose different business logic for the same underlying database and for the same outwardly presented website. In this scenario, a class of various adapters or mediating controllers can represent the variations in business logic among these jurisdictions in between the same database model and the same website view.

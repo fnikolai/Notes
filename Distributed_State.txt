@@ -1,0 +1,40 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-24T12:41:22+01:00
+
+====== Distributed State ======
+Created Tuesday 24 January 2017
+
+===== Distributed Data Replication Models =====
+
+[[+TransactionalReplication]] : Instances communicating by shared value (e.g one write into a lock, and the other checks it)
+
+[[+StateMachineReplication]]
+
+[[+VirtualSynchrony]] : Instances communicate via message passing (membership protocol is needed)
+
+
+===== Data replication and fault tolerance =====
+* make the replicated entity indistinguishable from a non-replicated object implementing the same interface
+* When we create a process group, the idea is that each of its members will hold a replica.
+* Updates are delivered to the group members through an event notification interface
+* None of the above support Byzantine agreement
+
+
+===== Virtual Synchrony vs Paxos =====
+
+==== Paxos ====
+* Paxos is a protocol for achieving consensus. In a few words, there is a set of members and we regard this whole set as a single system (that contains a single value), which is seen as centralised externally (but is replicated & distributed internally). The use-case is to be able to read-write this value to this system reliably (so that internally it exists in multiple nodes and it’s fault-tolerant). To achieve that, the notion of majority is used, so that the value returned by the system is the value holded by a majority of the nodes.
+* Regarded as an eventual consistent system (to avoid misunderstandings, it’s externally strongly consistent, but it’s internally eventually consistent),
+* Uses as membership protocol a gossip-based protocol (which is not strongly consistent, since different members of the group have different views at a single moment). This does not affect Paxos algorithm, since it only requires a majority (N/2+1) of votes, so it can tolerate “seeing some members as dead, while they are alive (or the opposite)”
+* A gossip-based protocol, each time a member considers another node as dead, it updates its own view of the group and after a timeout sends an update message to the rest of the group. So, the group view only eventually converges across the whole group.
+* Paxos has been used in replicated database systems, where durability is a main concern and losing updates would be catastrophic.
+
+==== VS ====
+* On the other hand, virtual synchrony is a model, where we have multiple nodes and we form groups out of these nodes. Each node can join & leave a group (in the same way as a Pub/Sub system). The requirement from this system is that messages are being received reliably only by the members of a group that are considered (from the whole group) to be alive, and in the same order by all the members of the group. However, the virtual synchrony model can be adapted and be used as a consensus problem, considering each group as a replicated variable and the messages sent inside a group as the changes applied to this variable.
+* virtual synchrony system could be considered to be strongly consistent. For instance, . However, virtual synchrony cannot tolerate such cases, thus uses a different membership protocol (which can be viewed as a fault-tolerant consensus protocol), so that all members of the group have the same view.
+* In the virtual synchrony model, whenever a members considers another member as dead, it initiates a consensus protocol and the group view is only updated when all the members of the group agree.
+* most of the virtual synchrony implementations provide relaxed (not strongly consistent) operations. As a result, virtual synchrony has been used in systems like Stock Exchange or News Feeds, where lost messages do not matter that much. 
+
+
+

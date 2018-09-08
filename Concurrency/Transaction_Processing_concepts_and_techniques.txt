@@ -1,0 +1,64 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-21T19:42:15+01:00
+
+====== Transaction Processing concepts and techniques ======
+Created Saturday 21 January 2017
+
+
+
+
+
+* sticky availability: if a client's transaction is executed against a copy of the database that reflects all of its prior operations, the client eventually receives a response
+
+
+
+==== Transactions ====
+* Often the state must be made temporarily inconsistency while it is being transformed to a new consistent state 
+* To cope with these tempporary inconsistences, sequences of actions are grouped to form transactions that preserve the consistency constrains.
+* Transactions are units of consistency
+* Transactions may overlap and result to inconsistent behavior (although as individuals are correct)
+
+== ACID ==
+	* atomicity: appears to jump from the initial state to the result state without any observable intermediates states
+	* consistency: a transaction produces consistency results only, otherwise it aborts.
+	* isolation: a program running under transaction protection must beave exactly as it would in single-user mode
+	* durability: requires that results of transactions having completed succesffully must not be forgoteen by the system
+
+== Flat transactions ==
+The basic building block for organizing an application into atomic actions.
+	* Selective rollback (if a flat consists of multiple TXs and one of them fails)
+	* Bulk updates (update multiple blocks at once)
+	* Complex updates are supported by savepoints or by nested transactions. Bulk updates are supported by chained transactions
+
+
+
+
+
+**time domain addressing: **programs an request either the current value of an object or the value of an object as of some time in the past
+
+=== Disk writes as atomic actions ===
+* single disk write:
+	* Either the entire block is correctly transferred to the specified slot, or the slot remains unchanges
+* read after write:
+	* No provision ro return the initial state (is it still true ?)
+	* The block on a disk can be bad
+	* if the system crashes on write, the block can be in an undefined state
+	* Detects cases that that a write pretends to be successful
+* duplex write:
+	* each block is written to two places A and B
+	* after the operation is succesffuly completed, write to A is moved to B
+	* First read from A, then from B
+* logged write
+	1. The old contents of the are first read and then written to a different place
+	2. The block is modified and eventually a single write is performed to the old location
+	3. to protect agaist unreported transier errors, read-after-write can be used
+
+=== Classification of action types ===
+* Unprotected: lock of all the ACID properties except for consistency
+	* Must be controller by the application environment, or must be embedded in some higher-level protected action
+* Protected: do not externalize their results before they are completely done
+	* commitment controlled
+* Real actions: affect the real, physical world in a way that is impossible to reverse
+	* The system must be able to recognize them as make sure that they are executed only if all enclosing protected actions have reached a state in which they will not decide to roll back
+

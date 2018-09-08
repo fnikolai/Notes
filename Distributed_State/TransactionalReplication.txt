@@ -1,0 +1,37 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-24T12:45:42+01:00
+
+====== TransactionalReplication ======
+Created Tuesday 24 January 2017
+
+* Also known as deferred-update
+* overheads are very high when using true one-copy serializability,
+* Instead, they fragment large databases into what are called shards, and they often relax consistency, offering a so-called NoSQL model instead of the full ACID replication model.
+* **!!!!! **Transactional one-copy serializability assumes that the data resides in a collection of transactional databases (on disk), and implements the full transactional ACID properties, with the usual begin/commit/abort interface 
+* Considers processes that communicate by invoking operations on shared data
+* why is transactional replication only used for applications such as cluster membership, leader elections and lock managers? Why aren’t these algorithms used for building distributed applications e.g., databases themselves? 
+
+
+===== Distributed transactions =====
+* A distributed transaction is composed of several sub-transactions, each running on a different site
+* Each database manaer can decide to abort
+* An atomic commitment protocol is run by each of the DM's to ensure that all the subtransactions are consistently commited or aborted
+
+==== Atomic commitment protocol (ACP) ====
+* All the DM  that reach a decision, reach the same decision
+* Decisions are not reversible
+* A comit decision can only be reached if all the DMs vote to commit
+* If there are not failures and all the DMs vote to commit, the decision will be commit
+* At any point, if all failures are repaired and no new failures are introduced, then all the DMs eventually reach a decision
+* An ACP is called blocking if the occurence of some failures forces the DMS to wait until failures are repaired before terminating the transaction
+* When a transaction is blocked at the DM, its locks cannot be released. This may lead to system blocking
+* Every protocol that tolerates network partitions is bound to be blocking
+* Traditionally two phase commit (2PC) algorithm has been used for distributed transactions. The problem with two phase commit is that it isn’t fault tolerant: if the coordinator node fails, the process is blocked until the coordinator is repaired (Consensus on Transaction Commit)
+
+
+==== Quorum based protocols ====
+* Either 2 phase commit (lock on single DM) or 3 phase commit (decision on quorum) 
+* Because 3PC can block a quorum, there is an extended version called 3EPC
+* Every DM has to agree locally
+* A majority of the DMs must agree to abort or comit after all the DMs agreed locally

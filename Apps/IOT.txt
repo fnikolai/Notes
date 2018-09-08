@@ -1,0 +1,12 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-26T19:21:55+01:00
+
+====== IOT ======
+Created Thursday 26 January 2017
+
+* IoT applications often require real-time analysis on data streams, but most software is designed to just read data from existing files. 
+* There is an enormous variety of prebuilt software that can do almost any imaginable computation provided that the input is in files (
+* In contrast, there is little prebuilt software for incremental data feeds (settings in which programs need to run continuously and accept one new input at a time).
+* This is why so many developers prefer to store data into files, then carry out any needed analysis on the files.  But here we run into another issue: in today’s systems, the delay (latency) of the store-then-compute style of analysis is often very high.
+* FFFS is able to accept streams of updates while fulfilling “temporal reads” on demand.   By running analytics on the files that FFFS captures, we can get the best of both worlds: high productivity through reuse of existing code, and ultra-low latency.  The key is that FFFS bridges between a model of continuously writing data into files and one of performing analysis on snapshots representing instants in time (much as if it was a file system backup system creating a backup after every single file update operation).

@@ -1,0 +1,40 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-24T13:14:45+01:00
+
+====== nonFunctional ======
+Created Tuesday 24 January 2017
+
+* MTBF (Mean time between failures)
+* MTTR (Mean Time To Recovery) : the average time from when a failure is encountered to when the previous state is restored
+
+===== Reliability =====
+
+* The term “reliability” was used informally and the term “fault tolerance” was used more formally,
+* Fault tolerance is only a part of the reliability story: in a fault tolerant multi-component system, it is sufficient that failure of one component doesn’t cause failure of other components. A system that continues to function in a degraded state is fault tolerant, but unless the full functionality of the previous state can be restored, it’s not fully reliable.
+* A reliable system requires fault tolerance, but a fault tolerant system may not require reliability.
+
+
+===== Recovery =====
+
+* Refers to restoring full functionality (defined to be the previous state in this context) when a failure occurs. Recovery is not often an explicitly stated goal, and is sometimes not included in formal definitions of reliability. 
+* Certain design choices (e.g., not maintaining a transaction log) can hurt a system’s recovery profile despite helping scalability and improving the availability of a system.
+
+
+===== Availability =====
+
+http://www.kitchensoap.com/2010/11/07/mttr-mtbf-for-most-types-of-f/
+
+* property that a system is ready to be used immediately. 
+* Recently the trend has become to build systems that either maintain availability in the face of failure or recover it quickly, rather then systems with especially high MTBF. This systems engineering view is well summarized by John Allspaw in “MTTR is more important than MTBF (for most types of F)”.
+
+===== Scalability =====
+
+* Property of systems that are able to handle an increase in requests without performance degradation, e.g., in terms of latency and/or throughput. 
+* With a stateless system (or a system whose state can fit within a single machine’s main memory), a simple way to increase scalability would be to use a high degree of replication (replicating the full instance of the service, allowing it to take both reads and writes) and round-robin requests between multiple machines. 
+* In a system where state does not fit in a single machine’s main memory, scalability generally requires partitioning the data, i.e., a shared-nothing architecture.
+
+=== Elasticity ===
+* The ability to add or remove resources (in our case, nodes) to change a system’s capacity without downtime. A scalable system may not always be elastic, e.g., if adding a node requires taking the system down, manually moving data around, reconfiguring the system, and then starting the system up again.
+
+

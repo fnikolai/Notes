@@ -1,0 +1,51 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-22T18:32:10+01:00
+
+====== DLM ======
+Created Sunday 22 January 2017
+
+* runs in every machine in a cluster, with an identical copy of a cluster-wide lock database.
+* synchronize their accesses to shared resources.
+* The DLM is used not only for file locking but also for coordination of all disk access.
+
+===== Lock modes =====
+
+=== Null (NL) ===
+* Indicates interest in the resource, but does not prevent other processes from locking it. I
+
+=== Concurrent Read (CR) ===
+* Indicates a desire to read (but not update) the resource. It allows other processes to read or update the resource, but prevents others from having exclusive access to it.
+* Usually employed on high-level resources, in order that more restrictive locks can be obtained on subordinate resources.
+
+=== Concurrent Write ===
+* Indicates a desire to read and update the resource.
+* Allows other processes to read or update the resource, but prevents others from having exclusive access to it. 
+* Employed on high-level resources, in order that more restrictive locks can be obtained on subordinate resources.
+
+=== Protected Read ===
+* This is the traditional share lock, which indicates a desire to read the resource but prevents other from updating it. Others can however also read the resource.
+
+=== Protected Write ===
+* This is the traditional update lock, which indicates a desire to read and update the resource and prevents others from updating it
+* Others with Concurrent Read access can however read the resource.
+
+=== Exclusive ===
+* allows read and update access to the resource, and prevents others from having any access to it.
+
+
+Mode	NL	CR	CW	PR	PW	EX
+NL		Yes	Yes	Yes	Yes	Yes	Yes
+CR		Yes	Yes	Yes	Yes	Yes	No
+CW		Yes	Yes	Yes	No	No	No
+PR		Yes	Yes	No	Yes	No	No
+PW		Yes	Yes	No	No	No	No
+EX		Yes	No	No	No	No	No
+
+==== Locking ====
+* Enqueue lock requests
+* Either synchronous or asynchronous (AST occurs when the lock has been obtained)
+* Lock value block : the value associated with each resource (e.g version, timestamp, ...)
+
+== Tools for distributed locks : ==
+chubby, zookeeper, etcd, redis, consul

@@ -1,0 +1,21 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-11-02T18:23:26+02:00
+
+====== Parallelism ======
+Created Thursday 02 November 2017
+
+
+Dataflow is deterministic which allows parallelism.
+Actors are non-deterministic which allows concurrency.
+
+parallelism is an optimisation; concurrency changes semantics.
+
+Concurrency and parallelism are two different things.
+
+Concurrency means that you have multiple threads interacting non-deterministically. For example, you might have a chat server where each client is handled by one thread. The non-determinism is essential to the system you're trying to model.
+
+Parallelism is about using multiple threads for simply making your program run faster. However, the end result should be exactly the same as if you run the algorithm sequentially.
+
+Many languages don't have primitives for parallelism, so you have to implement it using concurrency primitives like threads and locks. However, this means that you the programmer have to be careful to ensure that you don't accidentally introduce unwanted non-determinism or other concurrency issues. With explicit parallelism primitives like par and pseq, many of these concerns simply go away.
+

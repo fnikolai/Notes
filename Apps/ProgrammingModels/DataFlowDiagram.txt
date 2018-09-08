@@ -1,0 +1,11 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-11-02T19:17:42+02:00
+
+====== DataFlowDiagram ======
+Created Thursday 02 November 2017
+
+A data flow diagram (DFD) is a graphical representation of the "flow" of data through an information system, modelling its process aspects. 
+
+
+A DFD shows what kind of information will be input to and output from the system, how the data will advance through the system, and where the data will be stored. It does not show information about process timing or whether processes will operate in sequence or in parallel, unlike a traditional structured flowchart which focuses on control flow, or a UML activity workflow diagram, which presents both control and data flows as a unified model.

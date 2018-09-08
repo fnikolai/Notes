@@ -1,0 +1,52 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-04-23T18:57:46+02:00
+
+====== MonolithicVsModular ======
+Created Sunday 23 April 2017
+
+* **Monolithic: **"Batteries-included" and typically tightly coupled, it tries to include all the stuff that's needed for common usecases. An example of a monolithic web framework would be [Sails.js](http://sailsjs.org/).
+* **Modular**:"Minimal" and loosely coupled. Only includes the bare minimum of functionality and structure, and the rest is a plugin. Fundamentally, it generally only has a single 'responsibility'. An example of a modular web framework would be [Express](http://expressjs.com/).
+
+===== Coupled? =====
+
+In software development, the terms "tightly coupled" and "loosely coupled" are used to indicate how much components rely on each other; or more specifically, how many assumptions they make about each other. This directly translates to how easy it is to replace and change them.
+
+**Tightly coupled:** 
+	* Highly cohesive code, where every part of the code makes assumptions about every other part of the code.
+	* May result in more performant code, 
+
+**Loosely coupled:** 
+	* Very "separated" code, where every part of the code communicates with other parts through more-or-less standardized and neutral interfaces.
+	* Inner workings of a component are separated from its interface or API, you can make many more assumptions about how it behaves.
+	* Loosely coupled code is often centered around 'events' and data - a component 'emits' changes that occur, with data attached to them, and other components may optionally 'listen' to those events and do something with it. However, the emitting component has no idea who (if anybody!) is listening, and cannot make assumptions about what the data is going to be used for.
+	* If an application wants to start using the data differently, it doesn't require changes in the component; the data is still of the same format, and the application can simply process it differently.
+
+===== Determine how loosely coupled your code is =====
+
+**Does your component rely on external state?**
+	 This is an absolute no-no. Your component cannot rely on any state outside of the component itself. It may not make any assumptions about the application *whatsoever*. Don't even rely on configuration files or other filesystem files - all such data must be passed in by the application explicitly, always. What isn't in the component itself, doesn't exist.
+
+**How many assumptions does it make about how the result will be used?**
+	Loosely coupled code shouldn't care about how its output will be used, whether it's a return value or an event. The output just needs to be consistent, documented, and neutral.
+
+**How many custom 'types' are used?**
+	Loosely coupled code should generally only accept objects that are defined on a language or runtime level, and in common use. Arrays and A+ promises are fine, for example - a proprietary representation of an ongoing task is not
+	.
+**If you *need* a custom type, how simple is it?**
+	If absolutely needed, your custom object type should be as plain as possible - just a plain Javascript object, optimally. It should be well-documented, and not duplicate an existing implementation to represent this kind of data. Ideally, it should be defined in a separate project, just for documenting the type; that way, others can implement it as well.
+
+In this section, I've used the terms "component" and "application", but these are interchangeable with "callee"/"caller", and "provider"/"consumer". The principles remain the same.
+
+===== The trade-offs =====
+
+**Monolithic frameworks:**
+	* Are robust and difficult to adapt to non-provisioned use cases.
+	* Difficult to swap-out a buggy functionality
+	* The component is an inherent part of the framework, and replacing it may be impossible or extremely hard, depending on how many assumptions the framework makes.
+	* Slightly faster to get started with, but less control over its workings, more chance of the framework not supporting your usecase, and higher long-term maintenance cost due to the inevitable need for workarounds.
+
+**Modular frameworks :**
+	* have on-time cost to figure out what components to use. Then the majority of the modules are reusable across projects
+	* To swap-out a buggy functionality, get rid of the  offending component and replace it with a different one 
+* Takes slightly longer to get started on your first project, but total control over its workings, practically every usecase is supported, and long-term maintenance is cheaper.

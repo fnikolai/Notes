@@ -1,0 +1,28 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-22T22:08:12+01:00
+
+====== Apps ======
+Created Sunday 22 January 2017
+
+* Quality of service
+	1. History
+	2. Deadline
+	3. Time-based
+
+
+===== Principles =====
+
+==== Don't confuse Architecture and Technology ====
+* An architecture describes a behavior. 
+* The technology is the building bricks
+* Define data/service architecture first, then select appropriate technology
+
+**Example:**
+* Build **Architecture** on top of **Technology**
+* Build filesystem on top of object storage (kinetic)
+* Build object storage on top of filesystems (ext4)
+
+
+===== Plaform vs System =====
+A computing platform is the “stage” where computer programs run. An operating system sits between applications and hardware, managing how applications access hardware and software resources. This means that an operating system is a kind of computing platform, but a computing platform is not necessarily a kind of operating system. A runtime library can also be a computing platform.

@@ -1,0 +1,21 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-05-11T16:20:48+02:00
+
+====== Irods ======
+Created Thursday 11 May 2017
+
+
+* In iRODS, files are stored as Data Objects on disk and have an associated physical path as well as a virtual path within the iRODS file system
+
+
+* The terms root, leaf, branch, child, and parent represent locations and relationships within the structure of a particular tree. To represent the functionality of a particular resources within a particular tree, the terms 'coordinating' and 'storage' are used in iRODS. Coordinating resources coordinate the flow of data to and from other resources. Storage resources are typically 'leaf' nodes and handle the direct reading and writing of data through a POSIX-like interface.
+
+* This virtualization enables the coordinating resources to manage both the placement and the retrieval of Data Objects independent from the types of resources that are connected as children resources. 
+* iRODS offers multiple paths to interoperation with outside systems such as repositories, interfaces, and applications
+* in oceanographic research that simultaneously harvests multiple types of data from instruments on a research vessel in the Antarctic, far from shore-based support.
+
+
+The integrated Rule Oriented Data System (iRODS) is software middleware, or "cyberinfrastructure," that organizes distributed data into a sharable collection. The iRODS software is used to implement a data grid that assembles data into a logical collection. Properties such as integrity (uncorrupted record), authenticity (linking of provenance information to each record), chain of custody (tracking of location and management controls within the preservation environment), and trustworthiness (sustainability of the records) can be imposed on the logical collection. When data sets are distributed across multiple types of storage systems, across multiple administrative domains, across multiple institutions, and across multiple countries, data grid technology is used to enforce uniform management policies on the assembled collection
+
+The iRODS software is used to implement a data grid that assembles data into a logical collection. 

@@ -1,0 +1,81 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-04-22T22:55:46+02:00
+
+====== MPI ======
+Created Saturday 22 April 2017
+
+
+
+
+* Is high level compared to other networking libraries
+	* Abstracts transport layer
+	* Supplies higher-level operations (like broadcast)
+
+* Low level computational language
+	* Problem decomposition to multiple independent processes
+	* Manually write code for every communicaton
+
+* Very good for distributing single large technical computations across realible network
+	* Better perform with static topologies
+
+===== Communications =====
+* Point-to-point message passing:  one process has data which sends it to another process possibly on another node
+* Broadcast data: one process has a piece of data and broadcast to all the other processes (different noes)
+* Scatter : one process divides values among many others
+* Gatther: many processes have different parts of the overall picture which are then brought together into one process
+* Reduction: combines communications and computation. Perform a local computation and contribute to the global computation
+
+
+
+Scatter: divides a big array into a number of smaller parts equal to the number of processes and sends each process (including the source) a piece of the array in rank order.
+Gather: the opposite, receives data stored in small arrays from all the processes (including the source or root) and concatenates it in the receive array in rank order.
+
+{{./pasted_image.png}}
+
+In the illustration, MPI_Bcast takes a single data element at the root process (the red box) and copies it to all other processes. MPI_Scatter takes an array of elements and distributes the elements in the order of process rank. 
+
+
+{{./pasted_image001.png}}
+
+MPI_Gather is the inverse of MPI_Scatter. Instead of spreading elements from one process to many processes, MPI_Gather takes elements from many processes and gathers them to one single process. This routine is highly useful to many parallel algorithms, such as parallel sorting and searching.
+
+
+
+MPI_Scatter and MPI_Gather are synchronous operations. No barriers are needed
+To speedup things you can try asynchronous MPI_Iscatter and MPI_Igather. Those functions should be used in pair with MPI_Wait.
+
+
+===== MPI-IO =====
+
+
+Data consistency to other users
+* POSIX is far too strong (primary reason parallel
+file systems have reliability problems)
+* “Big Data” file systems are weak (eventual
+consistency; tolerate differences)
+* MPI is precise and provides high performance;
+consistency points guided by users 
+
+
+
+
+
+
+Level0: many independept, contiguous requests
+Level1: many collective, contiguous requests
+Level2: single independent, noncontiguous request
+Level3: single collective, noncontiguous request
+
+
+
+{{./pasted_image002.png?width=400}}
+
+
+
+
+* If the entity I/O access pattern is known to the implementation, the data access can be improved by making file access large and contiguous, reducing the I/O time
+* In Panda, the compute node sends a short high-level description of the in-memory and on-disk distributions for the arrays, and this information is distributed to other nodes in order to coordinate their accesses.
+* In Lustre, a file is created as separate sub-files, each of which is striped to only a few storage devides. They are joinsed as a single file at the file close time
+* data sieving is a non-contiguous read optimization of ROMIO and consists of bringing ta contiguous file zone in a memory buffer and filtering out the chunks of interest
+* ADIO separates the machine-dependent and machine-independent aspects involved in implenting an API. the machine-independent can be implemented portably on top of ADIO.

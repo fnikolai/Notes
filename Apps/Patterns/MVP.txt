@@ -1,0 +1,15 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-02T01:53:55+01:00
+
+====== MVP ======
+Created Thursday 02 March 2017
+
+{{./pasted_image.png}}
+
+* Model–view–presenter (MVP) is a derivation of the model–view–controller (MVC) architectural pattern, and is used mostly for building user interfaces.
+
+=== Components ===
+* The model is an interface defining the data to be displayed or otherwise acted upon in the user interface.
+* The presenter acts upon the model and the view. It retrieves data from repositories (the model), and formats it for display in the view.
+* The view is a passive interface that displays data (the model) and routes user commands (events) to the presenter to act upon that data.

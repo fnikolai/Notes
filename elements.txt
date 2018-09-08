@@ -1,0 +1,12 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2018-02-15T19:11:58+01:00
+
+====== elements ======
+Created Thursday 15 February 2018
+
+**Block** in the context of storage is the smallest size you're able to interface with the hardware at. Whenever you read from a disk or write to a disk, you read this amount times however many blocks you need to read. The default NTFS Block Size (AKA Cluster Size, AKA Allocation Unit) is 4096 bytes (4KB). If you have a file that is exactly 4096 bytes long, then you read one block from the disk. If it is 4097 bytes then you read two blocks. You cannot read a partial block, so even if a file doesn't actually consume a whole block, the storage file system blanks out the rest of the block. A simple way to see this in action is to create a blank text file on your hard drive, look at the properties and the difference between "Size" (0 bytes) and "Size on Disk" (4096 bytes).
+
+**Page** is similar to a block, but is the RAM equivalent. Blocks are usually the smallest unit of "cold" storage, while Pages are usually the smallest unit of in-memory storage. I could be wrong, but I believe the typical page size is also 4KB of memory.
+
+**Chunk** doesn't really have a strict definition, it's usually more use-specific. For example, a "chunk" of data might be the amount of data that an application processes from the disk at a time. For example, a log file is 100MB, and the parsing application reads the file in and processes it in 5MB chunks. Read 5MB -> Process 5MB -> Read 5MB -> Process 5MB, etc. In some storage systems this could be an abstraction layer above a block, for example, when talking about read/write caching, it may write data to disk in chunks that are not the same size as a single block. A lot of time reading and writing in chunks can improve performance.

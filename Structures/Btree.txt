@@ -1,0 +1,39 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-09T21:14:29+01:00
+
+====== Btree ======
+Created Thursday 09 March 2017
+
+* Btrees store both keys and data in the internal and leaf nodes, but in a b+ tree you have to store the data in the leaf nodes only.
+	* The differences lie in how they make use of secondary storage
+
+* Hard drive accesses a minimum of a page of memory at a time, so we want to fit all the pointers in a single page of memory. 
+	* We want to require only one disk read per leaf access, so we don't want to assign more than a page size of pointers to a leaf. 
+	* If we fill a leaf with a page size of pointers, and then we want to add another pointer to this leaf, we create two children of this node, and give half of the leaf's pointers to each new child. 
+	* There may be some reshuffling to ensure the tree's height is kept to a minimum.
+
+===== Btree =====
+
+* B trees contain data with each key, frequently accessed nodes can lie closer to the root, and therefore can be accessed more quickly.
+	* Are faster when do a seek (looking for a specific piece of data by key) especially when the tree resides in RAM or other non-block storage. Since you can elevate commonly used nodes in the tree there are less comparisons required to get to the data.
+		* On Btree, a full scan requires a traversal of every level in the tree.
+		* This full-tree traversal will likely involve more cache misses than the linear traversal of B+ leaves.
+
+	* If using a memory-like storage medium with random access, one can use a self-balancing binary tree such as a red-black tree to achieve better results.
+
+
+===== B+ tree =====
+
+* B+ trees are suitable when the tree grows so large that it need not fit into available memory. Thus, you'd generally expect to be doing multiple I/O's. 
+	* B+ tree is used even when it in fact fits into memory, because the leaf pages are linked together in a linked list (or doubly-linked list), which optimizes traversals (for range searches, sorting, etc.)
+		* full scan of all objects in a tree requires just one linear pass through all the leaf nodes.
+	
+	* B+ tree are B+ Trees are especially good in block-based storage
+		* high fanout / low depth: that means you have to get less blocks to get to the data. with data intermingled with the pointers, each read gets less pointers, so you need more seeks to get to the data
+		* simple and consistent block storage: an inner node has N pointers, nothing else, a leaf node has data, nothing else. that makes it easy to parse, debug and even reconstruct.
+		* high key density means the top nodes are almost certainly on cache, in many cases all inner nodes get quickly cached, so only the data access has to go to disk.
+		* becase data are not associated with interior nodes, more keys can fit on a page of memory. Therefore, it will require fewer cache misses in order to access data that is on a leaf node.
+
+
+===== B- tree =====

@@ -1,0 +1,84 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-07-25T19:29:21+02:00
+
+====== MVCC ======
+Created Tuesday 25 July 2017
+
+
+===== Snapshot Isolation =====
+* A transaction executing under snapshot isolation appears to operate on a personal snapshot of the database, taken at the start of the transaction. When the transaction concludes, it will successfully commit only if the values updated by the transaction have not been changed externally since the snapshot was taken. Such a write-write conflict will cause the transaction to abort.
+* Permits [[Anomalies|Write Skew]]
+* Usually set for the whole connection and don’t normally change per-transaction
+
+* Instead of locking that row for reading when somebody starts working on it, MVCC-based DBMS will create a “previous version” (“snapshot”) of that row, and will supply that “previous version” of the row to any other transaction which may try running concurrently.
+* each user connected to the database sees a snapshot of the database at a particular instant in time.
+* When an MVCC database needs to update an item of data, it will not overwrite the old data with new data, but instead marks the old data as obsolete and adds the newer version elsewhere.
+
+Snapshot isolation arose from work on multiversion concurrency control databases, where multiple versions of the database are maintained concurrently to allow readers to execute without colliding with writers. Such a system allows a natural definition and implementation of such an isolation level
+
+Unfortunately, the ANSI SQL-92 standard was written with a lock-based database in mind, and hence is rather vague when applied to MVCC systems. 
+
+In 2008, Cahill et al. showed that write-skew anomalies could be prevented by detecting and aborting "dangerous" triplets of concurrent transactions.[11] This implementation of serializability is well-suited to multiversion concurrency control databases, and has been adopted in PostgreSQL 9.1,[8][9][12] where it is referred to as "Serializable Snapshot Isolation", abbreviated to SSI. When used consistently, this eliminates the need for the above workarounds. The downside over snapshot isolation is an increase in aborted transactions. This can perform better or worse than snapshot isolation with the above workarounds, depending on workload.
+
+==== Hybrid ====
+
+* Some systems built using multiversion concurrency control (MVCC) may support (only) snapshot isolation to allow transactions to proceed without worrying about concurrent operations, and more importantly without needing to re-verify all read operations when the transaction finally commits. This is convenient because MVCC maintains a series of recent history consistent states. The only information that must be stored during the transaction is a list of updates made, which can be scanned for conflicts fairly easily before being committed. However MVCC systems (such as MarkLogic) will use locks to serialize writes together with MVCC to gain some of the performance gains and still support the stronger "serializability" level of isolation.
+
+
+==== Write Skew anomaly workaround ====
+
+**Materialize the conflict**
+Add a special conflict table, which both transactions update in order to create a direct write-write conflict.
+we can materialize the conflict by adding a new table which makes the hidden constraint explicit, 
+* violates normal form
+**Promotion**
+Have one transaction "update" a read-only location (replacing a value with the same value) in order to create a direct write-write conflict (or use an equivalent promotion, e.g. Oracle's SELECT FOR UPDATE).
+we can promote one of the transaction's reads to a write
+* may not always be possible
+
+===== Isolation Level =====
+
+==== Read Committed ====
+* At Read Committed level, MVCC-based DB implements reads using snapshots taken at the moment of the read query issued. 
+* Writes still request write (exclusive) lock. 
+* At Read Committed level for MVCC-based databases, “dirty reads” are not possible, but non-repeatable reads are possible.
+* Unlike with lock-based DBs, with MVCC-based databases writers do not block readers, and vice versa.
+* Does not allow true ACID
+
+==== Repeatable Read/Serializable ====
+* At Repeatable Read isolation level (which usually – though not always – coincides with Serializable isolation level), MVCC-based DB implements reads using shapshots taken at the moment of beginning of the transaction. 
+	* It’s designed to let you select a set of rows and then repeatedly see the same rows on every subsequent select, as long as you keep your transaction open.
+	* Let you see an unchanging view of the database over time. Even as it’s changing underneath you!
+* None of “dirty reads”, “non-repeatable reads”, and “phantom reads” are possible (at the cost of keeping more snapshots, especially if the longest of your transactions is long enough). 
+* Writes still request write lock. 
+* There is a special kind of failure which is specific for this isolation level with MVCC: the failure happens if our current transaction is trying to modify a row which has already been modified by another transaction after current transaction started. This phenomenon is known as a “serialization failure”.
+
+
+
+
+===== Versions =====
+
+==== Multiple versions in the database ====
+* garbage collect records when they are no longer required. 
+* PostgreSQL and Firebird/Interbase. 
+* similar approach with the difference that old versions are stored in tempdb (a database different from the main database). 
+* Older versions are provided as pointers to the newer versions and  are marked as expired and wait to be garbage collected
+
+* Versioning effectively starts with a copy-on-write mechanism that is invoked when a row is modified or deleted. 
+* The old version of the record is copied to the version store, and the new record contains a pointer to the old record in the version store. 
+
+==== Only the latest version in the database ====
+* reconstruct older versions of data dynamically as required by using undo
+* Oracle and MySQL/InnoDB.
+* Older versions are kept in a rollback segment
+* Transaction ID points to a slot in the rollback segment
+
+
+
+===== Challenges =====
+
+* Should the implementation disallow updating rows for which the snapshot has an out-of-date version, i.e. its version of reality has diverged from the latest version?
+* What is the latest version? Is it the latest committed version, the latest uncommitted version? What does “latest” mean? Is it “most recently updated by clock time” or is it “update by the transaction with the highest sequence number?” Does this vary between isolation levels?
+* If the implementation allows updating rows that are out-of-date (supposing the previous points have been resolved), what happens? Do you “leak” out of your isolation level, hence breaking consistency within your transaction? Do you fail the transaction? Or do you allow updating an old version, but then fail at commit time?
+* What happens if a transaction fails, and how does it fail / how is this presented to the user? (InnoDB used to deadlock and roll back the whole transaction; later it was changed to roll back just the failed statement).

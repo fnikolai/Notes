@@ -1,0 +1,14 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-04-24T16:25:52+02:00
+
+====== conherency ======
+Created Monday 24 April 2017
+
+* logical interconnection; overall sense or understandability.
+
+* coherence is a property of an individual memory location while consistency refers to the order of accesses to all memory locations. 
+
+* Sequential consistency is a strictly stronger property than coherence. That is: every system that is sequentially consistent is also coherent at every memory location. The opposite is not true, a memory that is coherent at every location is not necessarily sequentially consistent. 
+
+* So it seems the difference is that for coherent systems we need a total order on all events for each location (thus the ordering between events for particular location), while for consistent systems the total order should be defined on the all events (and thus the ordering is also between events for different locations)?

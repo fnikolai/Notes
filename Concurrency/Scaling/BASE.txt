@@ -1,0 +1,26 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-07-26T15:20:32+02:00
+
+====== BASE ======
+Created Wednesday 26 July 2017
+
+* Means: **Basically available, soft state, eventually consistent**
+
+
+===== Overview =====
+
+* BASE is optimistic and accepts that the database consistency will be in a state of flux.
+	* Leads to levels of scalability that cannot be obtained with ACID
+	* Support partial failures without total system failure
+	* Consistency does not mean Correct, it just meas the consistency of data among many hosts
+
+* If 2PC is not acceptable on the system, an alternative alternative solution is idempotent updates.
+	* An operation is considered idempotent if it can be applied one time or multiple times with the same result. 
+	* Idempotent operations are useful in that they permit partial failures, as applying them repeatedly does not change the final state of the system.
+	Example: a transaction that consists of two decoupled updates 
+
+* To implement idempotent:
+	* One technique is to use a table that records the transaction identifier that have been applied
+	* Another solution, is every transaction identifier to be used only once , but then a concern is ordering -but can be solved with message queues-
+		* If no transaction can be repeated, there is no need for idempotence

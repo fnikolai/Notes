@@ -1,0 +1,31 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-07-26T00:42:03+02:00
+
+====== Anomalies ======
+Created Wednesday 26 July 2017
+
+
+===== Dirty Read =====
+* A **dirty read** occurs if one transaction reads data that has been modified by another transaction.
+
+===== Lost update =====
+* A **lost update** occurs when two transactions read the same object and then modify this object independently. 
+* The transaction that is committed last overwrites the changes made by the earlier transaction.
+* Strict 2PL overcomes this inconsistency by locking T1 out from B. Unfortunately, deadlocks are something Strict 2PL does not overcome all the time.
+
+
+===== Non-Repeatable Read =====
+
+* A **non-repeatable read** occurs when a object is read twice within a transaction; and between the reads, it is modified by another transaction, therefore, the second read returns different values as compared to the first; i.e., the read operation is non-repeatable.
+
+===== Inconsistent state =====
+* **Inconsistent states**: This is a generalization of non-repeatable read and refers to a violation of a constraint. 
+
+===== Phantom read =====
+* **Phantom reads** are of a totally different nature than the anomalies introduced previously. They can occur when a transaction defines a subset of data items that the transaction wants to work with; e.g., by performing a query and obtaining a query result. At this point, it is possible that data items are concurrently changed by another transaction so that they no longer qualify for inclusion in the query result, or vice versa. The same applies to objects that are inserted or deleted.
+
+
+===== Write Skew =====
+* In a **write skew** anomaly, two transactions (T1 and T2) concurrently read an overlapping data set (e.g. values V1 and V2), concurrently make disjoint updates (e.g. T1 updates V1, T2 updates V2), and finally concurrently commit, neither having seen the update performed by the other.
+* Were the system serializable, such an anomaly would be impossible, as either T1 or T2 would have to occur "first", and be visible to the other. In contrast, snapshot isolation permits write skew anomalies.

@@ -1,0 +1,50 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-23T21:27:53+01:00
+
+====== BigData ======
+Created Monday 23 January 2017
+
+===== 5 V's of Big Data =====
+* Volume: Huge amounts of data
+* Variety: Different kinds of data
+* Velocity: Frequency at which data is generated, captured and shared
+* Veracity: Truthfulness and quality of data
+* Vale: Benefit of solution for an organization for their big data issues
+
+===== Heterogeneity =====
+Both type of heterogeneity force users to stick to a single vendor or a particular type of Cloud or impose heavy expense on porting
+
+==== Vertical ====
+* Found within the same type of Clouds
+* Caused by the interface and procedural heterogeneity across similar clouds
+	* For Example; IaaS providers
+* Can be addressed using middleware to homohenize the API and sometimes enforcing standaralizaton
+
+==== Horizontal ====
+* Found within different types of cloud
+* Caused by the heterogeneity in the paradigm of each cloud type
+	* For example, PaaS clouds afollow the philosophy of making the device and platform details transparent to the Cloud user
+* High level modeling effort can pay off when one needs to move application and code across different types of cloud
+
+=== High level modeling ===
+* Type of semantics
+	* Useful for portability and interoperability in Cloud computing
+	* Primary means of interacting with a cloud environment is through Web SErvices
+* Level of Abstraction
+	* An indicator of granularity and specificity of the modeling
+	* Ontological modeling is favored at higher level
+* Software life cycle
+	* Consider each stage of life cycle and avoid conflicts
+
+=== Semantics ===
+* System semantics
+	* Semantics pertaining to the system characteristics. Deployment and load balancing
+
+* Data semantics
+	* Data typing, storage formatting, access and manipulation restrictions
+
+* Non-Functional semantics (QOS characteristics)
+	* Performance, security, logging
+* Logic and Process
+	* Programming language, runtime, exception handling

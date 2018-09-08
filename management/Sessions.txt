@@ -1,0 +1,29 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-24T16:13:33+01:00
+
+====== Sessions ======
+Created Tuesday 24 January 2017
+
+===== Server affinity =====
+
+* Server affinity refers to the ability of a load balancer or router to send a user's request to the same server where their session was initiated.
+
+* If session-failover is supported by the application or networking layout, server affinity is not required, as it doesn't matter which server serves the request.
+
+* If session-failover is not supported, then to support HTTP sessions, it is important to send the user to the same server for each request. Otherwise, the user will be forced to initiate a new session each time they are sent to a new server. This may for example, force the user to log in again, for every server in the cluster.
+
+===== Sticky Sessions =====
+
+* A router or load balancer with sticky-session support can assign a single server to a particular user, based on their HTTP session or IP address
+* The assigned server is remembered by the router for a certain amount of time, ensuring that all future requests for the same session are sent to the same server.
+
+==== Advantages ====
+* Reduces the need to implement session-failover, as users are only sent to other servers if one goes offline.
+* Load balancer/router is often responsible for detecting offline servers, providing faster request-failover than round robin DNS-based load balancing.
+
+==== Disadvantages ====
+
+* The load-balancer/router must be load-balanced itself, or it becomes a point of failure that will take down an entire cluster.
+* Cannot provide global load-balancing (whereas round-robin DNS can).
+* Session-failover is often not implemented, as there is reduced need. If a server goes offline, all users lose their session.

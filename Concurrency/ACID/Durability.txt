@@ -1,0 +1,9 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-07-26T01:29:08+02:00
+
+====== Durability ======
+Created Wednesday 26 July 2017
+
+* Transaction being durable means that after you’ve got a reply from DB that the transaction has succeeded, DB guarantees that it will never go back. 
+* Kind of flush (sync) operation when you’re writing to file – you may write stuff to the file (or within transaction), but only after you’ve got a ‘successful’ notification from flush() (or from transaction) – you can be sure that it is indeed guaranteed to be written.6

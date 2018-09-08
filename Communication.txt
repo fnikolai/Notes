@@ -1,0 +1,29 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2018-09-08T16:27:34+02:00
+
+====== Communication ======
+Created Saturday 08 September 2018
+
+
+===== RPC VS MESSAGING =====
+
+Are you talking about RPC vs Messaging? As in (typically) asynchronous messaging? If that's what you're talking about, then Messaging tends to be more robust at the cost of complexity and extra infrastructure.
+
+The simplest example is if you have a scenario where you RPC->RPC->RPC, you end up having a call stack that's 3 processes/machines deep. Any one of those processes/machine could fail during processing, and the entire stack unwinds.
+
+If you were messaging, the actual connectivity between the processes is much less. You hand the message off, and you're on your way. Now if one of the processes fail, there's a good chance of it being restarted where it left off, since, typically, the message is still sitting on a queue somewhere waiting for a new process to fetch it. The overall time may be longer, but it's a much more robust system.
+
+Mind it's no panacea, there are a lot of pitfalls with an asynchronous architecture, but this robustness is a prime distinction between RPC and Messaging systems.
+
+
+
+
+===== TCP VS WEBSOCKET =====
+
+When you send bytes from a buffer with a normal TCP socket, the send function returns the number of bytes of the buffer that were sent. If it is a non-blocking socket or a non-blocking send then the number of bytes sent may be less than the size of the buffer. If it is a blocking socket or blocking send, then the number returned will match the size of the buffer but the call may block. With WebSockets, the data that is passed to the send method is always either sent as a whole "message" or not at all. Also, browser WebSocket implementations do not block on the send call.
+
+But there are more important differences on the receiving side of things. When the receiver does a recv (or read) on a TCP socket, there is no guarantee that the number of bytes returned correspond to a single send (or write) on the sender side. It might be the same, it may be less (or zero) and it might even be more (in which case bytes from multiple send/writes are received). With WebSockets, the receipt of a message is event driven (you generally register a message handler routine), and the data in the event is always the entire message that the other side sent.
+
+Note that you can do message based communication using TCP sockets, but you need some extra layer/encapsulation that is adding framing/message boundary data to the messages so that the original messages can be re-assembled from the pieces. In fact, WebSockets is built on normal TCP sockets and uses frame headers that contains the size of each frame and indicate which frames are part of a message. The WebSocket API re-assembles the TCP chunks of data into frames which are assembled into messages before invoking the message event handler once per message.
+

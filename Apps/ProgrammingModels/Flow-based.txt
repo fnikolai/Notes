@@ -1,0 +1,78 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-05-12T00:52:38+02:00
+
+====== Flow-based ======
+Created Friday 12 May 2017
+
+
+ flow-based programming (FBP) is a programming paradigm that defines applications as networks of "black box" processes, which exchange data across predefined connections by message passing, where the connections are specified externally to the processes. These black box processes can be reconnected endlessly to form different applications without having to be changed internally. FBP is thus naturally component-oriented.
+
+ It views an application not as a single, sequential process, which starts at a point in time, and then does one thing at a time until it is finished, but as a network of asynchronous processes communicating by means of streams of structured data chunks, called "information packets" (IPs). 
+
+Flow-based programming considers an application as a set of processes ("black boxes") communicating via connections, which the processes access by means of "ports". A process is an instance of a component, running concurrently with other processes, including potentially other instances of the same component. The representation is a directed graph consisting of processes as nodes and connections as edges. 
+
+The general approach in FBP is to conceptualize a program as a series of streams and substreams that flow through a series of connected processes. Parallelism and concurrency are enabled by restricting communication between processes to use streams of Information Packets ("passive" data) - shared memory problems are avoided by the rule that an Information Packet may only be "owned" (directly or indirectly) by a single process at a time.
+
+Components are the building blocks in Flow-based programming.
+
+A Process is an instance of a Component living in a Graph.
+
+
+
+IPs traveling across a given connection (actually it is their "handles" that travel) constitute a "stream", which is generated and consumed asynchronously
+
+IPs are usually structured chunks of data - some IPs, however, may not contain any real data, but are used simply as signals. An example of this is "bracket IPs", which can be used to group data IPs into sequential patterns within a stream, called "substreams". Substreams may in turn be nested. IPs may also be chained together to form "IP trees", which travel through the network as single objects.
+
+
+The system of connections and processes described above can be "ramified" to any size. During the development of an application, monitoring processes may be added between pairs of processes, processes may be "exploded" to subnets, or simulations of processes may be replaced by the real process logic. FBP therefore lends itself to rapid prototyping.
+
+
+
+Flow-Based Programming is an approach to developing applications, not in terms of the old von Neumann paradigm, but based on the concept of multiple asynchronous processes communicating by means of data streams. An application is viewed as a system of data streams being transformed by processes, rather than a single "dumb" actor doing one thing at a time until all the data is processed. In addition no process knows who its neighbours are - communication is indirect via connections defined externally to the process modules or components. This allows components to be "black boxes", so that complex applications can often be built without writing any new code at all. Although this concept is similar to concepts current in the area of distributed and parallel systems, up until now it has not been recognized that it is also an extremely productive approach to improving programmer productivity and application maintainability. 
+
+
+
+===== VS Data flow =====
+
+"Dataflow" often refers to fine-grained dataflow parallelism, at the
+level of machine instructions.  What we have here is coarse-grained
+dataflow at the level of processes.
+
+
+To me, data-flow is automagic (or declarative) whereas FBP / reactive- 
+programming is explicit. 
+
+
+e.g a = b + c 
+* In data flow b and c are handled together (implicitly defined what happens if there is delay between the two)
+* In flow based, b and c are fired independently and is left to the developer to define what will happen next
+
+
+
+
+
+
+Any vs. All
+
+This lists some arguments for triggering components when any input ports have data (Java FBP) vs. when all input ports have data (FlowBase - DavidBennett's implementation).
+
+A corollary of this is that, under the all protocol, a component is not reinvoked on exit if any input ports are drained.
+
+Under the all protocol, some behaviours characteristic of "traditional" FBP have to be enabled using additional component flags.
+
+Pro All (Con Any)
+
+Perhaps more intuitive than any, as there is a feeling that a component should not start until all the data is available. However, there are significant disadvantages - see e.g. the remarks about Collate below.
+Where all really does make a lot of sense is in the case of multiple input port non-loopers. However, even in this case, under the any protocol, such a component would simply wait until data arrives at the non-triggering port. And this case is so rare in practice that, in my opinion, it does not make sense to make the tail wag the dog.
+Pro Any (Con All)
+
+Greater propensity to deadlock in the all case: consider a Collate, where the "masters" input stream may contain many IPs before the first "detail" arrives. Under the all protocol, this component will have to be marked with a special flag to force it to start when the first data item arrives at any port (or earlier), as otherwise the masters input connection will most likely fill up before a detail arrives, resulting in deadlock. But this is actually the normal case for loopers with more than one input port, so it seems counterintuitive that the "normal" case is the one that needs to be marked.
+As a component will terminate when the first input port is drained (the port is empty and all its upstream components terminated), this may leave IPs still coming in on other input ports. Since the component in question will have terminated, this situation could also result in deadlocks. This again has to be countered by using still another component flag (or the same one). Again it seems counterintuitive that the "normal" case is the one that needs to be marked.
+For what it's worth, components in TomYoung's DFD system wait on a single port(usually) for data and trigger when that data is available. A few special components, such as Join, are written to trigger whenever data is available at any of a selected list of ports (multiplexing). So in the case of the DFD, the question is not 'Any' vs. 'All', but instead is what is required for the application. Join can combine any number of inputs, so no other multiplexing logic is required in any other component. --twyx
+
+
+
+In actors, the acquaintance relation is asymmetric. A can "know about" B (so that B is an acquaintance of A) without B "knowing about" A. Is this true of FBP?
+
+In FBP there is an additional level of indirection, so maybe A and B are not exactly acquaintances: A and B communicate via named ports, and the connection between an output port of A and an input port of B is defined (by the application builder) in a separate specification, so it is the application builder's responsibility to know whether B can handle A's output, and to connect transform processes in between if they are required. Connections are only one-way -- if A needs feedback from B, it must use a separate connection. The port mechanism is what gives FBP the attribute of ConfigurableModularity. 

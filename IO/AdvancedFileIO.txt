@@ -1,0 +1,37 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-04-23T21:22:55+02:00
+
+====== AdvancedFileIO ======
+Created Sunday 23 April 2017
+
+
+A scatter-gather scheme uses the operating system to deliver in one operation multiple discrete chunks of data (such as database records) from a file to separate, noncontiguous buffers in memory. A scatter-gather scheme also writes the data from noncontiguous buffers in one operation.
+
+
+* **Scatter/gather (vectored) I/O **
+	* Allows a single call to read from or write data to many buffers at once; useful for bunching together fields of different data structures to form one I/O transaction.
+	* It allows working with non contiguous blocks of data. i.e. buffers need not be part of an array, but separately allocated.
+	* The I/O is 'atomic'. i.e. If you do a writev, all the elements in the vector will be written in one contiguous operation, and writes done by other processes will not occur in between them.
+		* In contrast with multiple linear I/O operations, a process can execute a single vectored I/O operation with no risk of interleaving I/O from another process.
+
+
+* **Epoll**
+	* Improves on the poll() and select() system calls described in Chapter 2; useful when hundreds of file descriptors need to be polled from a single thread.
+
+* **Memory-mapped I/O**
+	* Maps a file into memory, allowing file I/O to occur via simple memory manipulation; useful for certain patterns of I/O.
+
+* **File advice**
+	* Allows a process to provide hints to the kernel on the process’s intended uses for a file; can result in improved I/O performance.
+
+* **Asynchronous I/O**
+	* Allows a process to issue I/O requests without waiting for them to complete; useful for juggling heavy I/O workloads without the use of threads.
+
+
+
+Unix does have functions readv and writev, but they allow noncontiguity only in memory and not in the file. POSIX has a function
+lio listio that allows the user to specify a list of requests at a time. However, the requests in the list can be a mixture of reads and writes, and the POSIX standard says that each of the requests will be submitted as a separate nonblocking request [6]. Therefore, POSIX implementations cannot optimize I/O for the entire list of requests, for example, by performing data sieving as described in Section 5. Furthermore, since the lio listio interface is not collective, implementations cannot perform collective I/O
+
+
+A naïve implementation of readv() and writev() could be implemented in user space as a simple loop, something similar to the following: Thankfully, this is not the Linux implementation: Linux implements readv() and writev() as system calls and internally performs scatter/gather I/O. In fact, all I/O inside the Linux kernel is vectored; read() and write() are implemented as vectored I/O with a vector of only one segment.

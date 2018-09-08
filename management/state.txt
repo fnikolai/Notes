@@ -1,0 +1,52 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-24T13:37:16+01:00
+
+====== state ======
+Created Tuesday 24 January 2017
+
+===== Stateless =====
+
+
+===== Stateful =====
+
+* How the state is maintained; i.e. whether a probabilistic mechanism is used, or rather a more definite mechanism such as an explicit acknowledgement.
+* How consistent the state has to be among the various network nodes which have that state; this is related to the previous point, of course, since if the state can be less consistent, less powerful mechanisms can be used.
+* Which entity has the responsibility of maintaining that state; the network nodes the end user, or some combination thereof.
+* Which entity has the authority and responsibility to discard that state when it is no longer useful or needed; the network nodes, or the end user (and again, this is related to the question above).
+* Whether or not the state is critical to continued handling of user traffic; i.e. whether or not the user will continue to receive service, albeit perhaps at a degraded level, if the state is lost.
+
+* What does really matter is to understand that the term "**soft state**" seems to refer to a system with a **collection of answers** to basically disparate questions regarding state. 
+
+==== Hard state ====
+* Under the HS approach, this state is created and deleted in a fully deterministic manner by cooperation among the routers. 
+* Since management of HS session state is completely deterministic, the HS setup protocol must be reliable, with acknowledgments and retransmissions
+
+==== Soft state ====
+
+* State is maintained probabilistically;
+* State is not necessarily consistent;
+* The user bears the entire responsibility of maintaining the state;
+* The network bears the entire responsibility of discarding the state;
+* Existence of the state may or may not be critical to receiving service, that is likely to be a local administrative decision.
+----
+* Soft state” is loosely defined as state that has several properties including relaxed consistency semantics , and is not critical to the core of the service (although soft state may often be required for optional functionality) . could be discarded by the routers as a local decision (e.g. because it was out of room), and the user would continue to receive service, albeit perhaps at a degraded level.
+* **Stored on memory of local machines** (which frequently implies using sticky sessions): Possibility of hot spots in the load balancer and need for sesions to be restarted when service node fail
+* **Stored on  separate system **(in a distributed cache.):  the availability and scalability properties of the separate stateful system carry over to the service itself.
+
+
+==== Systems examples (collection of properties) ====
+
+=== System 1 ===
+* State is maintained explicitly;
+* State is necessarily consistent globally;
+* The network bears the responsibility of maintaining the state (if the network has a problem, the user's only option is to retry from the beginning);
+* The user bears the bulk of the responsibility of discarding the state (although the network must protect itself from broken users);
+* Existence of the state is critical to receiving service.
+
+=== System 2 ===
+* State is maintained via a mixture of explicit and probabilistic means;
+* State is consistent in less global ways;
+* The user and network share the responsibility of maintaining the state, but with the ultimate burden falling on the user (much as the ultimate burden of retransmisison falls on TCP, although local unreliable links may do retransmission locally);
+* The network bears the responsibility of discarding the state, although the user will usually assist;
+* Existence of the state is critical to receiving service.

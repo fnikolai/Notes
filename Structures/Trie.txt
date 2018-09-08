@@ -1,0 +1,17 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-02-09T01:05:01+01:00
+
+====== Trie ======
+Created Thursday 09 February 2017
+
+"Trie" describes a tree data structure suitable for use as an associative array, where branches or edges correspond to parts of a key. The definition of parts is rather wide, here, because different implementations of tries use different bit-lengths to correspond to edges. For example, a binary trie has two edges per node that correspond to a 0 or a 1, while a 16-way trie has sixteen edges per node that correspond to four bits (or a hexidecimal digit: 0x0 through to 0xf).
+
+This diagram, retrieved from Wikipedia, seems to depict a trie with (at least) the keys 'A', 'to', 'tea', 'ted', 'ten' and 'inn' inserted:
+
+{{./pasted_image.png}}
+
+If this trie were to store items for the keys 't', 'te', 'i' or 'in' there would need to be extra information present at each node to distinguish between nullary nodes and nodes with actual values.
+
+
+{{./pasted_image001.png}}

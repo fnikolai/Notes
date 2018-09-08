@@ -1,0 +1,36 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-03-09T23:20:14+01:00
+
+====== Exoclone ======
+Created Thursday 09 March 2017
+
+# Exo-clones: Better Container Runtime Image Management across the Clouds
+
+* Innovation: is to allow volume snapshots in VDFS (our native hyper- converged distributed file system) to be exported to a stand-alone regular file that can be imported to another VDFS cluster efficiently (zerocopy when possible) called exo-clones.
+	* VDFS is built on top of a shared block storage platform, such as VSAN. VDFS will support parallel data path and distributed locking in a way similar to GPFS.
+
+* Purpose: treat the storage consumed by applications in production and development, across multiple environments, in the exact same way, using a common set of tools that manipulate a single storage object: an exoclone.
+	* Just as with regular files, exo-clones can be easily transmitted, stored, backed up, shared, or distributed with other 3rd party (non-VDFS) systems.
+	* Incremental backup by periodically sending files
+	* An exo-clone can be copied outside of the original VDFS instance and used by another VDFS cluster, or in a 3rdparty storage system.
+		* can be used standard file format for sharing file system changes across different storage systems across different environments.
+	* Exoclones are assigned a UUID at creation time afterward they become immutable
+
+* At any point, a volume clone can be marked as an exoclone, at which point it is either the first exo-clone in its lineage (analogous to an initial git init) or it was created by cloning an existing exo-clone, or merging multiple exo-clones (analogous to a git commit).
+	* Only block ranges that were modified via this exo-clone are cloned into the payload section,
+
+
+* Exoclone operations 
+	* checkout ... commit
+	* import/export: Export an exo-clone volume to a file 
+	* rebase/merge:
+
+* It is important to not scan the entire exo-clone volume to produce the file.  VDFS uses a COW B-tree to represent a volume, and clones the B-tree when creating a new snapshot. COW B-tree file systems like VDFS and BtrFS use a copy-on-write B-tree algorithm, and so when a volume is cloned and then modified, only B-tree nodes that were modified are duplicated, and unmodified B-tree nodes are shared as in Figure 2 where FOO is removed and FOO ' is added. Therefore we can determine what data and meta-data has been changed relative to the parent UUID by comparing the parent snapshot from which the current volume was created. Furthermore, we can limit our comparison of these two B-trees to only the Btree nodes which were actually modified.
+* All exoclones that become dependencies in this way are listed in the Dedup UUIDs section of the file format
+* exo-clones in VDFS exist as volumes with uncompressed block data consuming storage capacity, they can be compressed with a tool like gzip, just like tar archives, before they are stored in a 3rd-party storage system, e.g., for incremental backup.
+
+
+* The goal with mounting exo-clones in VDFS is to avoid decoding and deserialization of the vast majority of the exo-clone file data. We call this zero-copy import. This operation is similar to a fast-forward merge operation in git. Import follows two steps: (1) verify mounting is possible, (2)  deserialize the file system tree serialized in the meta-data section, and finally (3) increment the reference counts of all file data blocks referred to by the exo-clone.
+* Docker is today's de facto standard for container runtime image management. It uses a file system layer format to represent layers of an application, but changes to any file in that layer are represented as an entirely new file system layer, even though other files in the layer have not been modified . To overcome this, Docker expects developers to place files that are frequently updated (e.g., media assets, model files, sound and image files, etc...), either in development or by the application at run-time, in a separate volume.
+* When a change happens to a layer, the new layer must be retransmitted to any developers that want to rebuild their own application layer on top of the new base update, or to deployment nodes that want to run the newer container. With exo-clones, only the chunks that are modified must be retransmitted, not the whole layer, and we examine the effects this has on network overhead in this experiment.

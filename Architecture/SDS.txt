@@ -1,0 +1,72 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-09-07T21:21:48+03:00
+
+====== SDS ======
+Created Thursday 07 September 2017
+
+The basic idea -- running a storage array on a piece of commodity-server hardware -- acquired the name software-defined storage (SDS), 
+
+
+Storage systems are essential to the data center. Given the exponential rate of data growth, it is increasingly becoming more and more challenging to scale the enterprise storage infrastructure in a cost effective way.
+
+
+With the amount of information companies must handle growing at explosive rates, traditional storage solutions, such as those based on SAN or NAS architectures, are being pushed to, and past, their limits. The old model, in which new storage capacity is added by purchasing more and more custom-designed dedicated storage appliances, is simply no longer financially viable; IT budgets just can't keep up. Traditional storage systems are siloed and increasingly complex to maintain and scale, restricting enterprises to perform at their maximum efficiencies.
+
+Software defined storage (SDS) creates a virtualized network of storage resources by separating the control and management software from the underlying hardware infrastructure. This can be used to create storage networks that may tie together large pools of storage resources that can appear as one virtual entity.
+
+
+.  Today adding a NAS/SAN system in a data center has become a plug and play task that just need network design consideration and rest all can be done via a Web UI. These boxes contain almost all enterprise friendly features such as reliability, fault tolerance, high availability and clustering, deduplication, backup, low latency, high throughput and bandwidth, QoS
+
+However in recent times cloud and big data growth with their petabyte and exabyte focus made the enterprises to rethink their storage infrastructure. The box base approach is proving more and more expensive and hard to scale to suite these workloads. Vendor lock in’s and premiums paid for maintenance is also a cause of worry.
+
+SDS can also be seen as an extension of textbook term ‘distributed file systems.
+
+Let’s take a look at the big picture for a second. The model of the traditional data center, dating back a few years, heavily revolved around the physical infrastructure. We didn’t have virtualization or the concept of the cloud as we know it today. With that, we began to have hardware sprawl issues around servers, racks, and other equipment. Virtualization helped sort that out.
+
+Still, growth around resource demands continued. This expanded to other pieces inside of the data center – specifically storage. Just how many more disks could you buy? How many more physical controllers would you really need to handle an influx of cloud, virtualization and users? At some point, the logical layer would have to be introduced to help the storage component better operate.
+
+The idea here isn’t to take away from the storage controller, rather, it’s to help direct data traffic much more efficiently at the virtual layer. The power really kicks in because software-defined storage creates a much more agnostic platform to work with
+
+oftware-defined storage can create powerful links to other distributed data centers for replication, DR and even storage load-balancing. The really great piece here is that, ultimately, storage replication will happen at the virtual layer between heterogeneous storage components .The translation happens completely at the logical layer.
+
+
+{{./pasted_image.png?width=350}}
+
+
+
+
+{{./pasted_image001.png}}
+
+
+
+
+
+=== Logical Storage Abstraction ===
+Basically, you’re placing a powerful virtual layer between data request and the physical storage component. This layer allows you to manipulate how and where data is distributed. The great part here is that you’re still able to keep a heterogeneous storage infrastructure while still controlling the entire process from a virtual instance. You can present as many storage repositories to the software-defined storage layer and allow that instance to control data flow.
+
+
+=== Intelligent Storage Optimization ===
+Just because you have a logical storage control layer doesn’t mean you can’t still utilize the efficiencies of your existing storage. The software-defined storage component helps you push information to a specific type of repository. You’re able to control performance and capacity pools and further deliver information to the appropriate storage-type. 
+
+
+=== Creating a more powerful storage platform ===
+This hybrid storage model allows you to leverage the power of your physical infrastructure as well as your virtual. You’re able to create one logical control layer that helps you manage all of the physical storage points in your data center. This helps with storage diversification and helps prevent vendor lock-in. Logical storage abstraction also helps with migrating and moving data between storage arrays and between various underlying resources.
+
+
+
+
+
+Software Defined Storage
+A SDS system has several important components that separate it from traditional SANs. The Storage Network Industry Association (SNIA) has made an effort to describe important characteristics first defined software-defined storage (SDS) to include:
+
+Automation– Simplified management that reduces the cost of maintaining the storage infrastructure
+Standard Interfaces – APIs for the management, provisioning and maintenance of storage devices and services
+Virtualized Data Path – Block, File and/or Object interfaces that support applications written to these interfaces
+Scalability– Seamless ability to scale the storage infrastructure without disruption to the specified availability or performance
+Transparency – The ability for storage consumers to monitor and manage their own storage consumption against available resources and costs
+
+
+
+The goal is to create a centralized storage brain that can manage, monitor, and automate the storage activities for a software-defined data center.
+( Question ... is a ceph an sds ?)

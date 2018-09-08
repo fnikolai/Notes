@@ -1,0 +1,30 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2018-09-05T21:54:53+03:00
+
+====== Infrastructure ======
+Created Wednesday 05 September 2018
+
+
+1) Adhoc strips (perl, python, bash, ...)
+	* Choose your favorite scripting language 
+	* Define and write each of those steps in code
+	* Execute that script
+
+2) Configuration management tools (chef, puppet, ansible)
+	* Coding conventions – Consistent & predictable structure, file layout, clearly named parameters, secrets management, etc. 
+	* Idempotent Code – Continuously executing the same code repeatedly while producing the same result. 
+	* Distribution – Unlike ad hoc scripts, CM tools are designed specifically for managing large numbers of remote servers.
+
+
+3) Server templating tools  ( Docker, Packer, and Vagrant)
+	* Create an image of a server that captures a fully self-contained “snapshot” of the operating system, the software, the files, and all other relevant details. 
+	* And move on to your deployment step in your pipeline… • Server templating is a key component of the shift to immutable infrastructure. 
+
+4) Server provision toolse  ( Terraform, Azure Resource Manager Templates, AWS CloudFormation and OpenStack Heat )
+	* are responsible for creating your servers. • You can use this tools not only create servers, but also other resources such as databases, load balancers, firewall settings, storage, etc.
+
+
+- Just because your application may have Docker, you still need servers or infrastructure deployed somewhere, you still need storage, DNS, load balancers.
+	-> This is why 4 is needed
+	

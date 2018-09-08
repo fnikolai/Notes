@@ -1,0 +1,242 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-28T21:46:07+01:00
+
+====== DesignModels ======
+Created Saturday 28 January 2017
+
+
+
+
+===== Application-centric (old-fashioned) =====
+* Each application system has its own data model, and its code is inextricably tied with this data model. 
+	* Tightly coupled interfaces, Little interoperability
+	* No data governance
+	* Implicit state, not exposed
+
+
+===== Data centric =====
+
+{{./pasted_image006.png?width=300}}
+
+{{./pasted_image007.png?width=300}}
+
+* In the data centric architecture, the data model precedes the implementation of any given application (structured data)
+	* standardizing data, mapping data in disparate systems to a common set of fields
+	* transferring the data from many different sources into a common system
+	* data must comply with formats and states
+	* Schema, distinct objects, lifecycle, qos
+
+* The key to data-centric design is to separate data from behavior.
+	* Driver the interactions between components in terms of the stateful data, instead of the operations to be performed (object-oriented design)
+	* A data-centric interface specifies the common, logically shared data model produced and/or consumed by a component, along with the associated QoS requirements.
+	* loosely coupled software components with data-centric interfaces are then integrated into a working system through a data bus. 
+	* Data-centric update "nouns" -> "temperature of sensor #1221" to "27"
+	* Data-centric middleware disseminates and manages state. It doesn't send messages about the data; it sends the data itself. Consuming applications then pick up reflections of the global state. To do this, the middleware must know the data schemas, treat instances of data as known objects, and attach behaviors to the data, not to the flow.
+	* the infrastructure is responsible for providing a consistent view of "truth".
+
+
+* Ease of maintaining data consistency, due to single point of entry
+* Usually implies that separate teams work on app and DB
+* Examples: (Access, Excel, MySQL)
+* Can be built on top of  message-centric technology
+	* Build layers to handle schemas, caching, QOS, discovery,..
+
+
+Task centric operations relate to an atomic specific business-relevant operation. Data centric operations relate to entities. One task centric operation very likely will impact multiple entities.
+
+Strengths of data-centric design:
+
+1) Because the code is broken into parts around real world entities, these entities are easy to find and tweak. All the code relative to a certain set of data lives together.
+
+2) Because it has a global flow control, and the fact that it is it is centered around data (which people generally understand), it is relatively easy for programmers experienced with traditional procedural languages to adapt their previous experience into this style.
+
+3) It is very easy to model things like create/read/update/destroy because the data is found in a single model for all real world objects.
+
+4) For systems with many data types and a small amount of behavior, this approach evenly distributes the location of the code.
+
+Weaknesses of data-centric design:
+
+1) Because the structure of an object is a part of its definition, encapsulation is generally harder to achieve.
+
+2) Because the system is split according to data, behavior is often hard to track down. Similar operations often span across multiple data types, and as such end spread out across the entirety of the system.
+
+3) The cohesion of behavior within an object is often low since every object has to have all actions that could be taken upon it, and those actions often have very little to do with one another.
+
+
+
+It is very easy to model things like create/read/update/destroy because the data is found in a single model for all real world objects.
+
+The infrastructure manages state in data-centric designs
+
+This means that the infrastructure is responsible for providing a consistent view of "truth
+
+In this approach, the distributed infrastructure takes more responsibility; it offers to the distributed system a single version of "truth". The fundamental unit of communication is a data-object value; the infrastructure has done its job not when a message is delivered, but when all nodes have the correct understanding of that value. Because the focus is on the data itself, this is termed "data-centric" infrastructure.
+
+Data centricity, by contrast, makes the data the means of interaction. A data centric infrastructure must define the data it manages. Then, the infrastructure imposes rules that determine how data is structured, when data is changed, and how it is accessed.
+
+With data-centric nouns, the sending application sets the value of the known global data object "temperature of sensor #1221" to "27". The middleware knows what that means and distributes the information to nodes that need it. Receiving applications read the "temperature" value from the object, likely upon notification that it has changed.
+
+The database arose as a data-centric infrastructure technology that provides one key benefit: a source of consistent truth.
+
+Databases offer a clean conceptual interface to data: create, read, update, and delete (sometimes called CRUD). By enforcing structure and simple rules that control the data model, databases ensure consistency. By exposing the structure to all users, databases greatly ease system integration.
+
+Clear rules govern access to the data, how data in the system changes, and when participants get updates.
+
+In the data centric architecture, the data model precedes the implementation of any given application and will be around and valid long after it is gone.
+
+Many people may think this is what happens now or what should happen.  But it very rarely happens this way.  Businesses want functionality, and they purchase or build application systems.  Each application system has its own data model, and its code is inextricably tied with this data model.  It is extremely difficult to change the data model of an implemented application system, as there may be millions of lines of code dependent on the existing model.
+
+But acquiring more data isn’t going to make you data centric, and may even make you less data centric. If each dataset you acquire has a different data model, and you just plop them down in a data lake without any attempt to harmonize them, you are getting less and less data centric—even as you become more data driven.
+
+ The biggest problem is, until the data is normalized and cleansed, it’s unavailable for analytics.  This is good for canned analytics, but for exploratory analytics, this is a problem.
+
+The data lake approach says, “just put all your data in the lake, roughly in the format it was, and the data scientists will take it from here.”  This is great for the initial exploration, but the explosion in data sources means that, over time, the data lake will be overrun with inconsistent variation and unnecessary variety.
+
+
+=== Usages ===
+Example: Distribution of track data
+* Object lifecycle spans multiple updates
+* Topic-per-object is impractical
+	* Numerous objects, unknown identities, ...
+* Need data-aware filtering and/or QoS enforcement
+* Integrating independently developed components
+
+=== Principles ===
+* **Expose data and metadata:** 
+	* Expose data and metadata as first-class citizens, and uses them as the primary means of interconnecting heterogeneous systems
+
+* **Hide the behavior:** 
+	* Hides any behavior and direct references to operations or code of the component interfaces. 
+
+* **Delegate data-handling to a data bus: **
+	* Separation of data handling and application logic is necessary for loosely coupled systems. 
+	* The component application logic should focus on manipulating the interface data, not on its management and distribution.  The responsibility of data handling is delegated to a data bus
+	* data bus is the authoritative source of the world model shared amongst the components.
+
+* **Explicitly define data-handling contracts:**
+	* Data handling contracts should be explicitly specified by the application at design time, and enforced by the data bus at runtime. The delivery contracts specify the QoS attributes on the data produced and consumed by a component, including timing, reliability, durability, etc. The data bus examines these "contracts," and if compatible, establishes data flows. The data bus then enforces QoS contracts, thereby providing the application code clear, known expectations.
+
+=== Conclusions ===
+	* Describe a data stream of specific properties
+	* Behavior like fixed-channel networks
+
+
+===== Message-centric =====
+
+{{./pasted_image008.png?width=300}}
+
+* Unstructured data
+	* Opaque contents vary from message to message
+	* No object identify (indistinguishable messages)
+	* No lifecycle management
+	* Behaviors apply to whole data stream
+
+* Message centric architecture is half way between application centric architecture and data centric
+	* The middleware can control behaviors/flow of the (message) stream, but not properties of the data contained in messages.
+	* Future (or commands) to other nodes can be conveyed. E.g Node 3, fetch from Node 5 and let me know
+	* Message-centric systems usually send "verbs" -> "update the temperature for sensor #1221 to 27"
+	* in a verb-based system, applications interact directly with each other.
+		* Needs many commands and actions, hrows with the number of applications 
+
+Message-centric infrastructure sends messages of unknown content
+
+These include direct point-to-point messaging, queuing, broker, and transactional systems. They support different interaction patterns such as request/reply, remote-method invocation, transactional exchange, queues, and publish subscribe. Current implementations include RabbitMQ, IBM Websphere MQ, and Tibco Rendevous. 
+
+ With message-centric verbs, the thermometer would send messages like "update the temperature for sensor #1221 to 27". The middleware doesn't know this; there is no system notion of sensor ID or temperature. The applications must understand that these messages tell them to change their notion of temperature. The application developer must define functions and parameters and take the right actions.
+
+Since the middleware does not know what messages contain, the middleware can work only with messages themselves. The middleware can control behaviors of the stream, but not properties of the data contained in messages.
+
+
+===== Message vs Data centic =====
+
+Message-centric systems usually send "verbs", while data-centric systems update "nouns"
+
+
+when an application joins after missing 50 updates to the value of sensor #1221 and 30 to sensor #1222. The message centric system will send all 80 updates, and the receiver must then process each one. The data-centric middleware distributes the data space, and then simply allows the late joiner to read the latest value of each object, only two in this case. Both end up with the right value, but the network traffic and application processing is very different.
+
+Returning to the verb/noun analogy, the key difference is that in a verb-based system, applications interact directly with each other. In a data-centric noun-based system, applications interact with the data model, not directly with each other. This reduces coupling. Verb-based systems need many commands and actions, and this set grows with the number of applications. Noun-based systems support only a few actions on the data, and that set does not grow with the number of applications.
+
+
+
+===== Verb-based vs Noun-based =====
+
+
+* In a data-centric noun-based system, applications interact with the data model, not directly with each other. 
+	* support only a few actions on the data, and that set does not grow with the number of applications.
+
+
+* Allows you to share information between independent applications without building a complex application interface
+	* Can link applications with their own life cycle states that otherwise can’t sync up.
+	* Focus on functional or operational interfaces, and overlook impedance issues.
+	 * Since interface QoS and timing are not modeled, all the interface state and communications issues are implicitly assumed
+
+* Types
+	* direct point-to-point messaging, queuing, broker, and transactional systems
+
+* interaction patterns 
+	* request/reply, remote-method invocation, transactional exchange, queues, and publish subscribe. 
+
+
+=== Usages ===
+Example: securities order processing system
+* No notion of objects or state beyond individual message
+* No need to filter based on content
+* No need for real time QoS
+* Messaging interface is not integration interface
+
+=== Conclusion ===
+	* Every message conveyes unstructured information.
+	* Behavior similar to packet switching networks
+
+
+===== Data Driven =====
+* In Creating a Data-Driven Organization, Carl Anderson starts off saying, “Data-drivenness is about building tools, abilities, and, most crucially, a culture that acts on data.” 
+
+* But acquiring more data isn’t going to make you data centric, and may even make you less data centric.
+	* If each dataset you acquire has a different data model, and you just plop them down in a data lake without any attempt to harmonize them, you are getting less and less data centric—even as you become more data driven.
+
+* Traditional data warehouse environment relied on complex ETL (extract, transform, and load) routines to scrub the data and get it all to conform to a predesigned data warehouse schema.
+	* Slow process. Until the data are normalized, they are unavailable for analytics
+
+* The data lake approach says, “just put all your data in the lake, roughly in the format it was, and the data scientists will take it from here.” 
+	* over time, the data lake will be overrun with inconsistent variation and unnecessary variety.
+
+
+===== Domain-centric =====
+{{./pasted_image.png?width=300}}
+
+* Business logic tends to be placed as close to the data as possible. In case of relation databases, it is usually DB functions and stored procedures
+* Application code is often considered to be secondary. The development is usually started with modeling the database structure. Application code conforms to the model built in DB
+* Enables code reuse by creating APIs in the application code using protocols like REST.
+	* Not  share database between applications
+* Hard  to ensure consistency (stale data, write conflicts)
+* Teams work both in application and database
+
+
+
+===== Responsibility-centric =====
+
+
+
+
+In a responsibility-centric design, systems are divided by the collection of behaviors that they must implement. T
+
+
+A client object will make requests of the server to perform some service, and a server object will provide a public API for the set of services that it can perform. This relationship is described by a contract - that is a list of requests that can be made of the server by the client. Both objects must fulfill this contract, in that the client can only make the requests specified by the API, and the server must respond by fulfilling those requests when told.
+
+Strengths of responsibility-centric design:
+
+1) Objects tend to be highly cohesive around their behavior, because roles are defined by behavior, not data.
+
+2) Coupling to an interface rather than an implementation makes it easier to change behavior via composition.
+
+3) As more behaviors are introduced into the system, the number of objects increases rather than the lines of code within model objects.
+
+Weaknesses of responsibility-centric design:
+
+1) It is often difficult to drop into the code and make simple changes as even the simplest change necessitates understanding the architecture of at least the module. This means that the on-ramping time for the team is generally fairly high.
+
+2) Since there is generally no global control, it is often difficult for someone to grasp where things are happening. As Kent Beck, and Ward Cunningham have said, “The most difficult problem in teaching object- oriented programming is getting the learner to give up the global knowledge of control that is possible with procedural programs, and rely on the local knowledge of objects to accomplish their tasks.”
+
+3) Data is not as readily available since the destructuring of the application is around behavioral lines. The data can often be scattered throughout the system. Which means changing the data structure is more expensive than changing the behavior.

@@ -1,0 +1,49 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+
+====== Desires ======
+Created Thursday 09 March 2017
+
+===== Programming =====
+* Easily move from simulation to real program
+* Test corner cases by mocking resources
+* Do iconic performance measurements to see if the I/O is the bottleneck
+
+
+===== Automated, policy-based provisioning =====
+
+* Storage entities that are consumable by applications and users, whether virtual disks, objects or files, will be provisioned automatically according to policies specified by an IT professional (**Service Level Objectives (SLOs))**. 
+	* **The administrator will specify what they need, not how to achieve that.**
+	* The implementation will be done automatically by the storage platform based on a) the physical capabilities of the potentially heterogeneous hardware, and b) data and workload characteristics. 
+
+* For example, in one deployment, the performance requirements of an application may be met by utilizing a cache in a Flash tier, while in another instance striping may be a more cost-effective solution.
+
+
+
+===== Predictable quality of service =====
+
+* Today, storage experts try hard to ensure that storage meets the application needs in shared storage systems. Following the same theme of automation, algorithms will do the job in the future. 
+* In some cases, statistical (best-effort) approaches may suffice especially when predictability is required in aggregate (as in a large analytics farm). However, many users will still want the confidence that, for example, a critical database will achieve the required transactions per second despite “noisy neighbors” that try to use as much bandwidth from the storage as possible.
+* SDS platforms need robust mechanisms for admission control, performance differentiation and security in multi-tenancy environments.
+
+
+===== End-to-end monitoring =====
+
+* Administrators need scalable and intuitive tools to continuously monitor their storage infrastructure. 
+* Such visibility goes beyond predictable quality of service and reporting of compliance with policies. 
+	* System state, resource utilization, resource imbalances
+	* Allow the administrators to understand the behavior of the system, recognize trends, plan their physical resource inventory and, when worse comes to worst, do troubleshooting and root-cause analysis.
+	* They are critical, especially in so-called hyper-converged platforms where SDS shares compute resources with other workloads.
+
+
+===== Multi-site management =====
+
+* SDS with commodity hardware offers a major advantage for multi-site storage. 
+* Moreover, with the right tools, storage management is reduced to mundane tasks such as replacing faulty hardware components (servers, disks, controllers) that unskilled personnel can perform without service interruption
+
+
+===== Converged hardware platform =====
+
+* IT departments can standardize across a few hardware configurations that can be used to run applications as well as infrastructure services such as storage and networking. 
+	* This is a fundamental aspect of the Software-Defined Data Center (SDDC) vision. 
+* However, without the right tools for sandboxing the resources used for storage and for end-to-end monitor and control of the converged platform, SDS can quickly turn from an IT dream to a nightmare.

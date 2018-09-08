@@ -1,0 +1,46 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-21T19:54:23+01:00
+
+====== IO ======
+Created Saturday 21 January 2017
+
+===== Links =====
+[[+QIO]]
+
+
+
+* TCP like protocol performance fairness per flow. If an application has more flows it allocates more bandwidth, leading to resource underutilization. Similar effect as in 802.11	
+
+
+* In computer science, a sparse array is an array in which most of the elements have the default value (usually 0 or null). The occurrence of zero-value elements in a large array is inefficient for both computation and storage. An array in which there is a large number of zero elements is referred to as being sparse.
+
+===== Models =====
+
+**I/O one filer per process:  **A very fast way is to do I/O to one file per process. Each process creates and accesses a file that no other process is going to access, which means file/block locking on the file system level is avoided. 
+
+* **all processes, single shared file: **can be done in one of two modes, independent or collective mode.
+
+	1. With the independent mode, each process accesses the data directly from the file system without communicating or coordinating with the other processes.  This usually works best if the application is reading or writing large contiguous blocks of data in the file with one I/O request. 
+ 
+	2. Collective I/O leverages the typically very fast network interconnect in HPC systems to move data around between processes.  This is done to aggregate the small fragmented accesses to the file system into larger ones that result in much better access times. 
+
+* **N-M approach: **An alternative way is an N-M approach, where N>M.  This can be accomplished in a variety of ways, like grouping a set of processes together to create and access one file, while another group accesses a different file.  The Parallel Log Structured File System (PLFS) provides an abstract way for doing this
+
+* **I/O forwarding: **sends I/O requests to a remote server for processing. Compute nodes might not even have local disks to store data. They will just use a fast network interconnect to forward their I/O requests to I/O servers to handle them. 
+
+===== Networks =====
+* [[+RDMA]]
+* [[+iWarp]]
+* SCI (Scalable Coherent Interface)
+* QsNet
+
+=== Management ===
+* Ethernet
+
+=== Internode communication ===
+* Myrinet
+* Infiniband
+
+=== Block storage ===
+* Fibre channel

@@ -1,0 +1,19 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-24T12:43:05+01:00
+
+====== VirtualSynchrony ======
+Created Tuesday 24 January 2017
+
+
+* considers processes that communicate by message passing, and defines a model in which messages are either totally ordered or respect casual ordering
+* Virtual synchrony systems allow programs running in a network to organize themselves into process groups, and to send messages to groups (as opposed to sending them to specific processes). 
+* Each message is delivered to all the group members, in the identical order, and this is true even when two messages are transmitted simultaneously by different senders. 
+* allows  early (optimistic) delivery of messages, or relaxed forms of ordering
+* optimistic virtual synchrony protocols can deliver messages immediately upon their arrival. However, this could result in a violation of the safety property of the state machine replication model. To prevent such problems, the programmer who uses this feature is required to invoke a primitive called flush, which delays the caller until any optimistically delivered messages have reached all of the group members.
+* virtual synchrony systems can outperform the Paxos that is normally required for implementation of state machine replication
+* a process group, these state machines share copies of the data, and updates are delivered as events that occur in the same order at all the copies.
+* used mostly when applications are replicating information that evolves extremely rapidly.
+* **!!!!! **assumes that the variable is replicated in memory by a set of processes executing on some collection of machines in a network. 
+* Can be used as building block for Event notification, Locking, Fault-tolerance, Cooperative caching
+* CAnnot be used to implement consensus, because Vsync groups are susceptible to partitioning (e.g due to inaccurate failure detections)
